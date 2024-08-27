@@ -24,8 +24,10 @@
     "paths": {
       "@pages/*": ["src/pages/*"],
       "@styles/*": ["src/styles/*"],
+      "@layout/*": ["src/layout/*"],
       "@utils/*": ["src/utils/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@components/*": ["src/components/*"]
     }
   },
 
