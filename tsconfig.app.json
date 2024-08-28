@@ -27,7 +27,9 @@
       "@layout/*": ["src/layout/*"],
       "@utils/*": ["src/utils/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@store/*": ["src/store/*"],
+      "@services/*": ["src/services/*"]
     }
   },
 

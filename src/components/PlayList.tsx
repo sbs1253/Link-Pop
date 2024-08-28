@@ -1,45 +1,50 @@
 import styled from 'styled-components';
-import { CommentOutlined, FavoriteBorderOutlined, ThumbUpAltOutlined, MoreVertOutlined } from '@mui/icons-material';
+import {
+  CommentOutlined,
+  FavoriteBorderOutlined,
+  ThumbUpAltOutlined,
+  MoreVertOutlined,
+  ThumbDownOutlined,
+} from '@mui/icons-material';
 import { useState } from 'react';
+import { PlaylistType } from '@store/types';
 
-const PlayList = () => {
+const PlayList = ({ playlist }: { playlist: PlaylistType }) => {
   const [subscribed, setSubscribed] = useState(false);
-  const [like, setLike] = useState(0);
-  const [liked, setLiked] = useState(false);
-  const [commented, setCommented] = useState(0);
+  console.log(playlist);
+
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString(); // 원하는 형식으로 변환
+  };
+
   return (
     <PlayListContainer>
       <img src="assets/profile.jpg" alt="profile" />
       <div className="playlist__info">
         <div>
-          <h4>현재 플레이 리스트의 설명</h4>
-          <p>2024-08-27</p>
+          <h4>{playlist.title}</h4>
+          <p>{formatTimestamp(playlist.createdAt)}</p>
         </div>
         <ul>
           <li onClick={() => setSubscribed((state) => !state)}>
             <FavoriteBorderOutlined sx={subscribed ? { color: '#D33F40' } : null}></FavoriteBorderOutlined>
           </li>
-          <li
-            onClick={() =>
-              setLiked((state) => {
-                if (!state) {
-                  setLike((prev) => prev + 1);
-                } else {
-                  setLike((prev) => prev - 1);
-                }
-                return !state;
-              })
-            }
-          >
-            <ThumbUpAltOutlined sx={liked ? { color: '#D33F40' } : null}></ThumbUpAltOutlined>
-            <span>{like}</span>
+          <li>
+            <ThumbUpAltOutlined></ThumbUpAltOutlined>
+            <span>{playlist.likes}</span>
+          </li>
+          <li>
+            <ThumbDownOutlined></ThumbDownOutlined>
+            <span>{playlist.dislikes}</span>
           </li>
           <li>
             <CommentOutlined></CommentOutlined>
-            <span>{commented}</span>
+            <span>{playlist.comments?.length || 0}</span>
           </li>
         </ul>
-        <MoreVertOutlined className="more"></MoreVertOutlined>
+        <p className="playlist__creator">작성자 : {playlist.creator}</p>
+        <MoreVertOutlined className="playlist__more"></MoreVertOutlined>
       </div>
     </PlayListContainer>
   );
@@ -78,9 +83,9 @@ const PlayListContainer = styled.div`
     }
     & p {
       color: ${(props) => props.theme.colors.text.bodySubtle};
-      font-size: var(--font-size-body-small);
-      line-height: var(--line-height-body-small);
-      font-weight: var(--font-weight-body-small);
+      font-size: var(--font-size-caption);
+      line-height: var(--line-height-caption);
+      font-size: var(--font-size-caption);
     }
     & ul {
       display: flex;
@@ -92,25 +97,29 @@ const PlayListContainer = styled.div`
         align-items: center;
         gap: 5px;
         transition: color 0.3s;
-
         &:hover {
           color: ${(props) => props.theme.colors.primary.normal};
         }
-        & span {
+        & > * {
           font-size: var(--font-size-body-small);
           line-height: var(--line-height-body-small);
           font-weight: var(--font-weight-body-small);
         }
       }
     }
-  }
-  .more {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    transition: color 0.3s;
-    &:hover {
-      color: ${(props) => props.theme.colors.primary.normal};
+    & .playlist__creator {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+    & .playlist__more {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition: color 0.3s;
+      &:hover {
+        color: ${(props) => props.theme.colors.primary.normal};
+      }
     }
   }
 `;
