@@ -2,8 +2,10 @@ export interface UserType {
   id: string;
   username: string;
   email: string;
-  subscribedPlaylists: string[];
-  likedPlaylists: string[];
+  img: string;
+  likedPlaylists: Record<string, boolean>;
+  subscribedPlaylists: Record<string, boolean>;
+  createdPlaylists: Record<string, boolean>;
 }
 
 export interface TrackType {
@@ -20,7 +22,8 @@ export interface PlaylistType {
   id: string;
   title: string;
   description: string;
-  creator: string;
+  creatorId: string;
+  creator: PlaylistCreator;
   tracks: TrackType[];
   comments: Comment[];
   likes: number;
@@ -28,6 +31,11 @@ export interface PlaylistType {
   createdAt: number;
 }
 
+export interface PlaylistCreator {
+  id: string;
+  username: string;
+  img: string;
+}
 export interface LoginCredentials {
   email: string;
   password: string;

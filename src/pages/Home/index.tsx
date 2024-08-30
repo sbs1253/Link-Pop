@@ -2,16 +2,16 @@ import Category from '@pages/Home/components/Category';
 import PlayList from '@components/PlayList';
 import styled from 'styled-components';
 import { usePlaylist } from '@hooks/usePlaylists';
+import { useStore } from '@store/useStore';
 
 const Home = () => {
-  const { data } = usePlaylist();
-
+  const { user, setUser } = useStore();
+  const { data, error } = usePlaylist();
+  console.log(user);
   return (
     <HomeContainer>
       <Category />
-      {data?.map((playlist) => (
-        <PlayList key={playlist.id} playlist={playlist} />
-      ))}
+      {user && data?.map((playlist) => <PlayList key={playlist.id} playlist={playlist} user={user} />)}
     </HomeContainer>
   );
 };

@@ -6,31 +6,38 @@ import {
   MoreVertOutlined,
   ThumbDownOutlined,
 } from '@mui/icons-material';
-import { useState } from 'react';
-import { PlaylistType } from '@store/types';
+import { PlaylistType, UserType } from '@store/types';
+import { useSubscribe } from '@hooks/useSubscribed';
+import { useLike } from '@hooks/useLike';
 
-const PlayList = ({ playlist }: { playlist: PlaylistType }) => {
-  const [subscribed, setSubscribed] = useState(false);
-  console.log(playlist);
-
+const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleString(); // 원하는 형식으로 변환
+    return date.toLocaleString();
   };
-
+  const { mutate } = useSubscribe();
+  const { mutate: likeMutate } = useLike();
+  const handleSubscription = () => {
+    mutate({ userId: user.id, playlistId: playlist.id, subscribed: user.subscribedPlaylists[playlist.id] });
+  };
+  const handleLike = () => {
+    likeMutate({ userId: user.id, playlistId: playlist.id, likedPlaylists: user.likedPlaylists[playlist.id] });
+  };
   return (
     <PlayListContainer>
-      <img src="assets/profile.jpg" alt="profile" />
+      <img src={playlist.creator.img} alt="profile" />
       <div className="playlist__info">
         <div>
           <h4>{playlist.title}</h4>
           <p>{formatTimestamp(playlist.createdAt)}</p>
         </div>
         <ul>
-          <li onClick={() => setSubscribed((state) => !state)}>
-            <FavoriteBorderOutlined sx={subscribed ? { color: '#D33F40' } : null}></FavoriteBorderOutlined>
+          <li onClick={handleSubscription}>
+            <FavoriteBorderOutlined
+              sx={user.subscribedPlaylists[playlist.id] ? { color: '#D33F40' } : null}
+            ></FavoriteBorderOutlined>
           </li>
-          <li>
+          <li onClick={handleLike}>
             <ThumbUpAltOutlined></ThumbUpAltOutlined>
             <span>{playlist.likes}</span>
           </li>
@@ -43,7 +50,7 @@ const PlayList = ({ playlist }: { playlist: PlaylistType }) => {
             <span>{playlist.comments?.length || 0}</span>
           </li>
         </ul>
-        <p className="playlist__creator">작성자 : {playlist.creator}</p>
+        <p className="playlist__creator">작성자 : {playlist.creator.username}</p>
         <MoreVertOutlined className="playlist__more"></MoreVertOutlined>
       </div>
     </PlayListContainer>

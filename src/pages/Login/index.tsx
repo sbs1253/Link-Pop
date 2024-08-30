@@ -1,6 +1,47 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { loginUser, useLogin, copyUserData } from '@hooks/useLogin';
+import { useLogin } from '@hooks/useLogin';
+import { Navigate } from 'react-router-dom';
+
+export const Login: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const { mutate, isPending, isError, error, isSuccess } = useLogin();
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutate({ email, password });
+  };
+  if (isPending) {
+    return <div>로그인 중...</div>;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+  if (isSuccess) {
+    return <Navigate to="/" />;
+  }
+  return (
+    <LoginContainer>
+      <Title>Studio 로그인</Title>
+      <Form onSubmit={handleLogin}>
+        <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" required />
+        <Input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="비밀번호"
+          required
+        />
+        {/* <Button type="submit" disabled={isLoading}>
+          {isLoading ? '로그인 중...' : '로그인'}
+        </Button> */}
+        <Button type="submit">로그인</Button>
+      </Form>
+      {/* {data.isError && <ErrorMessage>로그인에 실패했습니다. 다시 시도해주세요.</ErrorMessage>} */}
+    </LoginContainer>
+  );
+};
 
 const LoginContainer = styled.div`
   background-color: #121212;
@@ -51,36 +92,3 @@ const ErrorMessage = styled.p`
   text-align: center;
   margin-top: 10px;
 `;
-
-export const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  // const { mutate, isLoading, isError, error, isSuccess, data } = useLogin();
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // console.log('loginUser(email, password): ', await loginUser(email, password));
-    copyUserData('oldUserId', '6r3fhuMeIEXxpVlbxBTOL8PNKXT2');
-    // mutate({ email, password });
-  };
-
-  return (
-    <LoginContainer>
-      <Title>Studio 로그인</Title>
-      <Form onSubmit={handleLogin}>
-        <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" required />
-        <Input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
-          required
-        />
-        {/* <Button type="submit" disabled={isLoading}>
-          {isLoading ? '로그인 중...' : '로그인'}
-        </Button> */}
-        <Button type="submit">로그인</Button>
-      </Form>
-      {/* {data.isError && <ErrorMessage>로그인에 실패했습니다. 다시 시도해주세요.</ErrorMessage>} */}
-    </LoginContainer>
-  );
-};
