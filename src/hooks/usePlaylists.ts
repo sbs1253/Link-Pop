@@ -3,7 +3,7 @@ import { ref, get } from 'firebase/database';
 import { db } from '@services/firebase';
 import { PlaylistType, UserType } from '@store/types';
 
-const playlists = async (): Promise<PlaylistType[]> => {
+const playlists = async () => {
   const playlistsRef = ref(db, 'playlists');
   const snapshot = await get(playlistsRef);
   const playlistsArray = snapshot.val() as PlaylistType[];
@@ -26,7 +26,7 @@ const playlists = async (): Promise<PlaylistType[]> => {
 
   return playlists;
 };
-export const usePlaylist = () => {
+export const usePlaylists = () => {
   return useQuery<PlaylistType[], Error>({
     queryKey: ['playlist'],
     queryFn: playlists,

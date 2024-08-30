@@ -1,13 +1,15 @@
 import Category from '@pages/Home/components/Category';
 import PlayList from '@components/PlayList';
 import styled from 'styled-components';
-import { usePlaylist } from '@hooks/usePlaylists';
+import { usePlaylists } from '@hooks/usePlaylists';
 import { useStore } from '@store/useStore';
 
 const Home = () => {
   const { user, setUser } = useStore();
-  const { data, error } = usePlaylist();
-  console.log(user);
+  const { data, isLoading, error } = usePlaylists();
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading playlists</div>;
+
   return (
     <HomeContainer>
       <Category />

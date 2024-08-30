@@ -4,6 +4,7 @@ export interface UserType {
   email: string;
   img: string;
   likedPlaylists: Record<string, boolean>;
+  dislikedPlaylists: Record<string, boolean>;
   subscribedPlaylists: Record<string, boolean>;
   createdPlaylists: Record<string, boolean>;
 }

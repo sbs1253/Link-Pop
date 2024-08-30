@@ -8,20 +8,39 @@ import {
 } from '@mui/icons-material';
 import { PlaylistType, UserType } from '@store/types';
 import { useSubscribe } from '@hooks/useSubscribed';
-import { useLike } from '@hooks/useLike';
+import { useLikeDislike } from '@hooks/useLike';
 
 const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  };
   const { mutate } = useSubscribe();
-  const { mutate: likeMutate } = useLike();
+  const likeDislikeMutation = useLikeDislike();
   const handleSubscription = () => {
     mutate({ userId: user.id, playlistId: playlist.id, subscribed: user.subscribedPlaylists[playlist.id] });
   };
+
   const handleLike = () => {
-    likeMutate({ userId: user.id, playlistId: playlist.id, likedPlaylists: user.likedPlaylists[playlist.id] });
+    if (!user) return;
+    const currentState = user.likedPlaylists?.[playlist.id] || false;
+    likeDislikeMutation.mutate({
+      userId: user.id,
+      playlistId: playlist.id,
+      action: 'like',
+      currentState,
+    });
+  };
+
+  const handleDislike = () => {
+    if (!user) return;
+    const currentState = user.dislikedPlaylists?.[playlist.id] || false;
+    likeDislikeMutation.mutate({
+      userId: user.id,
+      playlistId: playlist.id,
+      action: 'dislike',
+      currentState,
+    });
+  };
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
   };
   return (
     <PlayListContainer>
@@ -38,11 +57,15 @@ const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }
             ></FavoriteBorderOutlined>
           </li>
           <li onClick={handleLike}>
-            <ThumbUpAltOutlined></ThumbUpAltOutlined>
+            <ThumbUpAltOutlined
+              sx={user.likedPlaylists[playlist.id] ? { color: '#D33F40' } : null}
+            ></ThumbUpAltOutlined>
             <span>{playlist.likes}</span>
           </li>
-          <li>
-            <ThumbDownOutlined></ThumbDownOutlined>
+          <li onClick={handleDislike}>
+            <ThumbDownOutlined
+              sx={user.dislikedPlaylists[playlist.id] ? { color: '#D33F40' } : null}
+            ></ThumbDownOutlined>
             <span>{playlist.dislikes}</span>
           </li>
           <li>

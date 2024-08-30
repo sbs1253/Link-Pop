@@ -1,45 +1,60 @@
-import { get, ref, update } from 'firebase/database';
+import { get, increment, ref, update } from 'firebase/database';
 import { db } from '@services/firebase';
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
-import { UserType } from '@store/types';
+import { PlaylistType, UserType } from '@store/types';
 import { useStore } from '@store/useStore';
-
-interface SubscribeData {
+interface LikeDislikeData {
   userId: string;
   playlistId: string;
-  likedPlaylists: boolean;
+  action: 'like' | 'dislike';
+  currentState: boolean;
 }
 
-// 구독 상태 업데이트
-export const updateSubscription = async (userId: string, playlistId: string, likedPlaylists: boolean) => {
+export const updateLikeDislike = async (
+  userId: string,
+  playlistId: string,
+  action: 'like' | 'dislike',
+  currentState: boolean
+) => {
+  const userRef = ref(db, `users/${userId}`);
   const playlistRef = ref(db, `playlists/${playlistId}`);
-  const userLikedRef = ref(db, `users/${userId}/likedPlaylists/${playlistId}`);
-  const userLikedSnapshot = await get(userLikedRef);
-  const playlistSnapshot = await get(playlistRef);
-  const playlist = playlistSnapshot.val();
-  console.log(playlist.likes, userLikedSnapshot.val());
 
-  if (!likedPlaylists) {
-    await update(playlistRef, { likes: playlist.likes + 1 });
+  const updates: { [key: string]: unknown } = {};
+  if (action === 'like') {
+    updates[`users/${userId}/likedPlaylists/${playlistId}`] = !currentState;
+    updates[`playlists/${playlistId}/${action}s`] = increment(currentState ? -1 : 1);
   } else {
-    await update(playlistRef, { likes: playlist.likes - 1 });
+    updates[`users/${userId}/dislikedPlaylists/${playlistId}`] = !currentState;
+    updates[`playlists/${playlistId}/${action}s`] = increment(currentState ? -1 : 1);
   }
-  const userSnapshot = await get(ref(db, `users/${userId}`));
-  return userSnapshot.val() as UserType;
+  await update(ref(db), updates);
+
+  const [userSnapshot, playlistSnapshot] = await Promise.all([get(userRef), get(playlistRef)]);
+  return {
+    user: userSnapshot.val() as UserType,
+    playlist: playlistSnapshot.val() as PlaylistType,
+  };
 };
 
-export const useLike = (): UseMutationResult<UserType, Error, SubscribeData, unknown> => {
-  // const queryClient = useQueryClient();
+export const useLikeDislike = (): UseMutationResult<
+  { user: UserType; playlist: PlaylistType },
+  Error,
+  LikeDislikeData,
+  unknown
+> => {
+  const queryClient = useQueryClient();
   const { setUser } = useStore();
-  return useMutation<UserType, Error, SubscribeData>({
-    mutationFn: ({ userId, playlistId, likedPlaylists }: SubscribeData) =>
-      updateSubscription(userId, playlistId, likedPlaylists),
-    onSuccess: (user, { playlistId }) => {
+
+  return useMutation<{ user: UserType; playlist: PlaylistType }, Error, LikeDislikeData>({
+    mutationFn: ({ userId, playlistId, action, currentState }: LikeDislikeData) =>
+      updateLikeDislike(userId, playlistId, action, currentState),
+    onSuccess: ({ user, playlist }, { userId, playlistId }) => {
       setUser(user);
-      // queryClient.setQueryData(['user', userId], user);
+      queryClient.setQueryData(['user', userId], user);
+      queryClient.invalidateQueries({ queryKey: ['playlist'] });
     },
     onError: (error) => {
-      console.error('Failed to update subscription:', error);
+      console.error('Failed to update like/dislike:', error);
     },
   });
 };
