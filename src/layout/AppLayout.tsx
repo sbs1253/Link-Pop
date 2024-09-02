@@ -1,10 +1,10 @@
 import Footer from '@components/Footer';
 import Header from '@components/Header';
-import { useStore } from '@store/useStore';
+import { useUserStore } from '@store/useUserStore';
 import { Navigate, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 function AppLayout() {
-  const { user } = useStore();
+  const { user } = useUserStore();
   if (!user) {
     return <Navigate to={{ pathname: '/login' }} />;
   }

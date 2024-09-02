@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useLogin } from '@hooks/useLogin';
+import { useLogin } from '@services/reactQuery/useLogin';
 import { Navigate } from 'react-router-dom';
 
 export const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { mutate, isPending, isError, error, isSuccess } = useLogin();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,6 +23,7 @@ export const Login: React.FC = () => {
   }
   return (
     <LoginContainer>
+      <img src="assets/logo.png" alt="logo" />
       <Title>Studio 로그인</Title>
       <Form onSubmit={handleLogin}>
         <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" required />
@@ -33,23 +34,31 @@ export const Login: React.FC = () => {
           placeholder="비밀번호"
           required
         />
-        {/* <Button type="submit" disabled={isLoading}>
-          {isLoading ? '로그인 중...' : '로그인'}
-        </Button> */}
         <Button type="submit">로그인</Button>
       </Form>
-      {/* {data.isError && <ErrorMessage>로그인에 실패했습니다. 다시 시도해주세요.</ErrorMessage>} */}
     </LoginContainer>
   );
 };
 
 const LoginContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #121212;
   color: white;
   padding: 20px;
   border-radius: 8px;
   width: 300px;
   margin: 50px auto;
+  & img {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const Title = styled.h2`

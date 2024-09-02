@@ -3,12 +3,14 @@ export interface UserType {
   username: string;
   email: string;
   img: string;
-  likedPlaylists: Record<string, boolean>;
-  dislikedPlaylists: Record<string, boolean>;
-  subscribedPlaylists: Record<string, boolean>;
-  createdPlaylists: Record<string, boolean>;
+  likedPlaylists?: PlaylistsType;
+  dislikedPlaylists?: PlaylistsType;
+  subscribedPlaylists?: PlaylistsType;
+  createdPlaylists?: PlaylistsType;
 }
-
+export interface PlaylistsType {
+  [key: string]: boolean;
+}
 export interface TrackType {
   title: string;
   url: string;

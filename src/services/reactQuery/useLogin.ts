@@ -1,6 +1,6 @@
 import { UserType } from '@store/types';
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
-import { useStore } from '@store/useStore';
+import { useUserStore } from '@store/useUserStore';
 import { loginUser } from '@services/api/authService';
 
 interface LoginData {
@@ -10,7 +10,7 @@ interface LoginData {
 
 export const useLogin = (): UseMutationResult<UserType, Error, LoginData, unknown> => {
   const queryClient = useQueryClient();
-  const setUser = useStore((state) => state.setUser);
+  const setUser = useUserStore((state) => state.setUser);
 
   return useMutation<UserType, Error, LoginData>({
     mutationFn: (credentials: LoginData) => loginUser(credentials.email, credentials.password),

@@ -7,43 +7,48 @@ import {
   ThumbDownOutlined,
 } from '@mui/icons-material';
 import { PlaylistType, UserType } from '@store/types';
-import { useSubscribe } from '@hooks/useSubscribed';
-import { useLikeDislike } from '@hooks/useLike';
+import { useSubscribe } from '@services/reactQuery/useSubscribed';
+import { useLikeDislike } from '@services/reactQuery/useLike';
+import { useNavigate } from 'react-router-dom';
 
 const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
   const { mutate } = useSubscribe();
   const likeDislikeMutation = useLikeDislike();
-  const handleSubscription = () => {
-    mutate({ userId: user.id, playlistId: playlist.id, subscribed: user.subscribedPlaylists[playlist.id] });
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/playlist/${playlist.id}`); // 상세 페이지로 이동
+  };
+  const handleSubscription = (e) => {
+    e.stopPropagation();
+    mutate({ userId: user.id, playlistId: playlist.id, subscribed: user.subscribedPlaylists?.[playlist.id] || false });
   };
 
-  const handleLike = () => {
+  const toggleLikeDislike = (list: Record<string, boolean> | undefined, action: 'like' | 'dislike') => {
     if (!user) return;
-    const currentState = user.likedPlaylists?.[playlist.id] || false;
+    const currentState = list?.[playlist.id] || false;
     likeDislikeMutation.mutate({
       userId: user.id,
       playlistId: playlist.id,
-      action: 'like',
+      action,
       currentState,
     });
+  };
+  const handleLike = (e) => {
+    e.stopPropagation();
+    toggleLikeDislike(user.likedPlaylists, 'like');
   };
 
-  const handleDislike = () => {
-    if (!user) return;
-    const currentState = user.dislikedPlaylists?.[playlist.id] || false;
-    likeDislikeMutation.mutate({
-      userId: user.id,
-      playlistId: playlist.id,
-      action: 'dislike',
-      currentState,
-    });
+  const handleDislike = (e) => {
+    e.stopPropagation();
+    toggleLikeDislike(user.dislikedPlaylists, 'dislike');
   };
+
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
   };
   return (
-    <PlayListContainer>
+    <PlayListContainer onClick={handleClick}>
       <img src={playlist.creator.img} alt="profile" />
       <div className="playlist__info">
         <div>
@@ -53,18 +58,18 @@ const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }
         <ul>
           <li onClick={handleSubscription}>
             <FavoriteBorderOutlined
-              sx={user.subscribedPlaylists[playlist.id] ? { color: '#D33F40' } : null}
+              sx={user.subscribedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
             ></FavoriteBorderOutlined>
           </li>
           <li onClick={handleLike}>
             <ThumbUpAltOutlined
-              sx={user.likedPlaylists[playlist.id] ? { color: '#D33F40' } : null}
+              sx={user.likedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
             ></ThumbUpAltOutlined>
             <span>{playlist.likes}</span>
           </li>
           <li onClick={handleDislike}>
             <ThumbDownOutlined
-              sx={user.dislikedPlaylists[playlist.id] ? { color: '#D33F40' } : null}
+              sx={user.dislikedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
             ></ThumbDownOutlined>
             <span>{playlist.dislikes}</span>
           </li>

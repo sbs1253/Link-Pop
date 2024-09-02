@@ -1,20 +1,13 @@
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@styles/GlobalStyle';
 import theme from '@styles/theme';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AppLayout from '@layout/AppLayout';
 import NotFound from '@pages/NotFound';
 import Home from '@pages/Home';
 import { Login } from '@pages/Login';
-import { useStore } from '@store/useStore';
+import PlaylistDetail from '@pages/PlaylistDetail';
 
-// const ProtectedRoute = ({ children }) => {
-//   const { user } = useStore();
-//   if (!user) {
-//     return <Navigate to="/login" replace />;
-//   }
-//   return children;
-// };
 const router = createBrowserRouter([
   {
     path: '/login',
@@ -29,7 +22,15 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+      {
+        path: 'playlist/:id',
+        element: <PlaylistDetail />,
+      },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 function App() {
