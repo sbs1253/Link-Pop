@@ -19,6 +19,7 @@ export interface TrackType {
 export interface CommentType {
   userId: string;
   comment: string;
+  createdAt: number;
 }
 
 export interface PlaylistType {

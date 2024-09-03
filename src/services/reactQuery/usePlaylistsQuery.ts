@@ -36,7 +36,7 @@ export const usePlaylistsQuery = () => {
   });
   useEffect(() => {
     if (data) {
-      setPlaylists(data); // Zustand 스토어에 플레이리스트 저장
+      setPlaylists(data);
     }
   }, [data, setPlaylists]);
 

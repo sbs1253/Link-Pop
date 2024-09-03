@@ -23,13 +23,30 @@ const PlaylistDetail = () => {
     <PlaylistDetailContainer>
       <PlayList playlist={playlist} user={user} />
       <PlaylistDetailList>
+        <h3>Tracks</h3>
         {playlist.tracks?.map((playlist, index) => (
           <Tracks key={index} title={playlist.title} url={playlist.url} index={index}></Tracks>
         ))}
-        {playlist.comments?.map((playlist, index) => (
-          <Comment key={index} userId={playlist.userId} comment={playlist.comment}></Comment>
-        ))}
       </PlaylistDetailList>
+      <PlaylistDetailComment>
+        <h3>Comment</h3>
+        {playlist.comments?.map((playlist, index) => (
+          <Comment
+            key={index}
+            userId={playlist.userId}
+            comment={playlist.comment}
+            createdAt={playlist.createdAt}
+          ></Comment>
+        ))}
+        {playlist.comments?.map((playlist, index) => (
+          <Comment
+            key={index}
+            userId={playlist.userId}
+            comment={playlist.comment}
+            createdAt={playlist.createdAt}
+          ></Comment>
+        ))}
+      </PlaylistDetailComment>
     </PlaylistDetailContainer>
   );
 };
@@ -48,5 +65,12 @@ const PlaylistDetailList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 0;
+`;
+
+const PlaylistDetailComment = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 0;
 `;

@@ -1,8 +1,7 @@
-import { UserType } from '@store/types';
 import { ref, get } from 'firebase/database';
 import { db } from '@services/firebase';
 
-export const fetchUserDataFirebase = async (userId: string): Promise<UserType> => {
+export const fetchUserDataFirebase = async (userId: string) => {
   const userRef = ref(db, `users/${userId}`);
   const snapshot = await get(userRef);
   const userData = snapshot.val();

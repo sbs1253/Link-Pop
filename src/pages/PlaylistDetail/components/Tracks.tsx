@@ -4,7 +4,7 @@ import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFil
 const Tracks = ({ title, url, index }: TrackType & { index: number }) => {
   return (
     <TracksContainer>
-      <h3>Tracks{index}</h3>
+      <h3>Tracks: {index + 1}</h3>
       <a href={url}>
         <PlayCircleFilledWhiteOutlinedIcon />
         {title}
@@ -30,8 +30,12 @@ const TracksContainer = styled.li`
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #fff;
+    color: ${(props) => props.theme.colors.text.title};
     font-size: 20px;
     text-decoration: none;
+
+    &:hover {
+      color: ${(props) => props.theme.colors.primary.normal};
+    }
   }
 `;

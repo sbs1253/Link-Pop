@@ -17,7 +17,7 @@ const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }
 
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/playlist/${playlist.id}`); // 상세 페이지로 이동
+    navigate(`/playlist/${playlist.id}`);
   };
 
   return (
@@ -81,7 +81,6 @@ const PlayListContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* align-items: center; */
     gap: 10px;
     width: 100%;
     & h3 {
