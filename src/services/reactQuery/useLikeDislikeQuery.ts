@@ -1,6 +1,6 @@
 import { get, increment, ref, update } from 'firebase/database';
 import { db } from '@services/firebase';
-import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlaylistType, UserType } from '@store/types';
 import { useUserStore } from '@store/useUserStore';
 import { usePlaylistStore } from '@store/usePlaylistStore';
@@ -11,12 +11,7 @@ interface LikeDislikeData {
   currentState: boolean;
 }
 
-const updateLikeDislike = async (
-  userId: string,
-  playlistId: string,
-  action: 'like' | 'dislike',
-  currentState: boolean
-) => {
+const updateLikeDislike = async ({ userId, playlistId, action, currentState }: LikeDislikeData) => {
   const userRef = ref(db, `users/${userId}`);
   const playlistRef = ref(db, `playlists/${playlistId}`);
 
@@ -37,19 +32,13 @@ const updateLikeDislike = async (
   };
 };
 
-export const useLikeDislike = (): UseMutationResult<
-  { user: UserType; playlist: PlaylistType },
-  Error,
-  LikeDislikeData,
-  unknown
-> => {
+export const useLikeDislikeQuery = () => {
   const queryClient = useQueryClient();
   const { setUser } = useUserStore();
   const { updatePlaylist } = usePlaylistStore();
 
-  return useMutation<{ user: UserType; playlist: PlaylistType }, Error, LikeDislikeData>({
-    mutationFn: ({ userId, playlistId, action, currentState }: LikeDislikeData) =>
-      updateLikeDislike(userId, playlistId, action, currentState),
+  return useMutation({
+    mutationFn: updateLikeDislike,
     onSuccess: ({ user, playlist }, { playlistId }) => {
       setUser(user);
       updatePlaylist(playlistId, playlist);

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useLogin } from '@services/reactQuery/useLogin';
+import { useLoginQuery } from '@services/reactQuery/useLoginQuery';
 import { Navigate } from 'react-router-dom';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { mutate, isPending, isError, error, isSuccess } = useLogin();
+  const { mutate, isPending, isError, error, isSuccess } = useLoginQuery();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

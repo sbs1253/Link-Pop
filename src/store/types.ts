@@ -17,7 +17,7 @@ export interface TrackType {
 }
 
 export interface CommentType {
-  user: string;
+  userId: string;
   comment: string;
 }
 
@@ -28,7 +28,7 @@ export interface PlaylistType {
   creatorId: string;
   creator: PlaylistCreator;
   tracks: TrackType[];
-  comments: Comment[];
+  comments: CommentType[];
   likes: number;
   dislikes: number;
   createdAt: number;

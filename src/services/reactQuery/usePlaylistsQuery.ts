@@ -28,9 +28,9 @@ const playlists = async () => {
   return playlists;
 };
 
-export const usePlaylists = () => {
+export const usePlaylistsQuery = () => {
   const setPlaylists = usePlaylistStore((state) => state.setPlaylists);
-  const { data, error, isLoading } = useQuery<PlaylistType[], Error>({
+  const { data, error, isLoading } = useQuery({
     queryKey: ['playlist'],
     queryFn: playlists,
   });

@@ -7,53 +7,26 @@ import {
   ThumbDownOutlined,
 } from '@mui/icons-material';
 import { PlaylistType, UserType } from '@store/types';
-import { useSubscribe } from '@services/reactQuery/useSubscribed';
-import { useLikeDislike } from '@services/reactQuery/useLike';
 import { useNavigate } from 'react-router-dom';
-
+import { useformatTimestamp } from '@hooks/useformatTimestamp';
+import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
 const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
-  const { mutate } = useSubscribe();
-  const likeDislikeMutation = useLikeDislike();
+  const { handleSubscription, isPending, isError, error } = usePlaylistSubscriptionActions(playlist, user);
+
+  const { handleLike, handleDislike } = useLikeDislikeActions(playlist, user);
+
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`/playlist/${playlist.id}`); // 상세 페이지로 이동
   };
-  const handleSubscription = (e) => {
-    e.stopPropagation();
-    mutate({ userId: user.id, playlistId: playlist.id, subscribed: user.subscribedPlaylists?.[playlist.id] || false });
-  };
 
-  const toggleLikeDislike = (list: Record<string, boolean> | undefined, action: 'like' | 'dislike') => {
-    if (!user) return;
-    const currentState = list?.[playlist.id] || false;
-    likeDislikeMutation.mutate({
-      userId: user.id,
-      playlistId: playlist.id,
-      action,
-      currentState,
-    });
-  };
-  const handleLike = (e) => {
-    e.stopPropagation();
-    toggleLikeDislike(user.likedPlaylists, 'like');
-  };
-
-  const handleDislike = (e) => {
-    e.stopPropagation();
-    toggleLikeDislike(user.dislikedPlaylists, 'dislike');
-  };
-
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  };
   return (
     <PlayListContainer onClick={handleClick}>
       <img src={playlist.creator.img} alt="profile" />
       <div className="playlist__info">
         <div>
           <h4>{playlist.title}</h4>
-          <p>{formatTimestamp(playlist.createdAt)}</p>
+          <p>{useformatTimestamp(playlist.createdAt)}</p>
         </div>
         <ul>
           <li onClick={handleSubscription}>
