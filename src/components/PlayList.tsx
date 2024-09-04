@@ -18,6 +18,35 @@ const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }
   const handleClick = () => {
     navigate(`/playlist/${playlist.id}`);
   };
+  const navList = [
+    {
+      onClick: handleSubscription,
+      icon: (
+        <FavoriteBorderOutlined
+          sx={user.subscribedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
+        ></FavoriteBorderOutlined>
+      ),
+      text: <span>{playlist.likes}</span>,
+    },
+    {
+      onClick: handleLike,
+      icon: (
+        <ThumbUpAltOutlined sx={user.likedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}></ThumbUpAltOutlined>
+      ),
+      text: <span>{playlist.likes}</span>,
+    },
+    {
+      onClick: handleDislike,
+      icon: (
+        <ThumbDownOutlined sx={user.dislikedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}></ThumbDownOutlined>
+      ),
+      text: <span>{playlist.dislikes}</span>,
+    },
+    {
+      icon: <CommentOutlined></CommentOutlined>,
+      text: <span>{playlist.comments?.length || 0}</span>,
+    },
+  ];
 
   return (
     <PlayListContainer onClick={handleClick}>
@@ -28,27 +57,12 @@ const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }
           <p>{useformatTimestamp(playlist.createdAt)}</p>
         </div>
         <ul>
-          <li onClick={handleSubscription}>
-            <FavoriteBorderOutlined
-              sx={user.subscribedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
-            ></FavoriteBorderOutlined>
-          </li>
-          <li onClick={handleLike}>
-            <ThumbUpAltOutlined
-              sx={user.likedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
-            ></ThumbUpAltOutlined>
-            <span>{playlist.likes}</span>
-          </li>
-          <li onClick={handleDislike}>
-            <ThumbDownOutlined
-              sx={user.dislikedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
-            ></ThumbDownOutlined>
-            <span>{playlist.dislikes}</span>
-          </li>
-          <li>
-            <CommentOutlined></CommentOutlined>
-            <span>{playlist.comments?.length || 0}</span>
-          </li>
+          {navList.map((nav, index) => (
+            <li key={index} onClick={nav.onClick}>
+              {nav.icon}
+              {nav.text}
+            </li>
+          ))}
         </ul>
         <p className="playlist__creator">작성자 : {playlist.creator.username}</p>
         <MoreVertOutlined className="playlist__more"></MoreVertOutlined>
