@@ -3,7 +3,6 @@ import PlayList from '@components/PlayList';
 import styled from 'styled-components';
 import { useState } from 'react';
 import useCategory from '@hooks/useCategory';
-
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const { data, isLoading, error, user } = useCategory(selectedCategory);
@@ -12,6 +11,7 @@ const Home = () => {
   const handleCategory = (category: string) => {
     setSelectedCategory(category);
   };
+  // console.log(data, userdata);
   return (
     <HomeContainer>
       <Category handleCategory={handleCategory} />

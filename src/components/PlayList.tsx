@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useformatTimestamp } from '@hooks/useformatTimestamp';
 import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
 const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
+  console.log(playlist);
   const { handleSubscription, isPending, isError, error } = usePlaylistSubscriptionActions(playlist, user);
   const { handleLike, handleDislike } = useLikeDislikeActions(playlist, user);
   const navigate = useNavigate();

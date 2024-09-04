@@ -1,11 +1,8 @@
-import {
-  SpaceDashboardOutlined,
-  VideoLibraryOutlined,
-  InsertChartOutlined,
-  CommentOutlined,
-} from '@mui/icons-material';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { SpaceDashboardOutlined, ControlPoint, LogoutOutlined } from '@mui/icons-material';
+import { useUserStore } from '@store/useUserStore';
+import { usePlaylistStore } from '@store/usePlaylistStore';
 const Footer = () => {
   const navigate = useNavigate();
 
@@ -15,26 +12,20 @@ const Footer = () => {
         navigate('/');
       },
       icon: <SpaceDashboardOutlined></SpaceDashboardOutlined>,
-      text: 'Dashboard',
+      text: 'Home',
+    },
+    {
+      icon: <ControlPoint className="listAdd"></ControlPoint>,
+      text: '',
     },
     {
       onClick: () => {
-        navigate('/content');
+        useUserStore.persist.clearStorage();
+        usePlaylistStore.persist.clearStorage();
+        navigate('/login');
       },
-      icon: <VideoLibraryOutlined></VideoLibraryOutlined>,
-      text: 'Content',
-    },
-    {
-      icon: <InsertChartOutlined></InsertChartOutlined>,
-      text: 'Analytics',
-    },
-    {
-      icon: <CommentOutlined></CommentOutlined>,
-      text: 'Comments',
-    },
-    {
-      icon: <img src="assets/profile.jpg" alt="profile" />,
-      text: 'MY',
+      icon: <LogoutOutlined></LogoutOutlined>,
+      text: 'Logout',
     },
   ];
   return (
@@ -66,7 +57,7 @@ const FooterContainer = styled.nav`
 
   & ul {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
     height: 100%;
     & li {
@@ -77,6 +68,9 @@ const FooterContainer = styled.nav`
       height: 100%;
       transition: color 0.3s;
       cursor: pointer;
+      & .listAdd {
+        font-size: 30px;
+      }
       & img {
         width: 26px;
         height: 26px;

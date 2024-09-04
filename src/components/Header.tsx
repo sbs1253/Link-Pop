@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { NotificationsNoneOutlined, ControlPoint, Search } from '@mui/icons-material';
+import { NotificationsNoneOutlined, Search } from '@mui/icons-material';
 
 const Header = () => {
   return (
@@ -9,9 +9,9 @@ const Header = () => {
         <span>Studio</span>
       </div>
       <nav className="header__nav">
-        <ControlPoint></ControlPoint>
         <Search></Search>
         <NotificationsNoneOutlined></NotificationsNoneOutlined>
+        <img src="assets/profile.jpg" alt="profile" />
       </nav>
     </HeaderContainer>
   );
@@ -45,9 +45,16 @@ const HeaderContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 20px;
+    & * {
+      cursor: pointer;
+    }
+    & img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+    }
     & svg {
       transition: color 0.3s;
-
       &:hover {
         color: ${(props) => props.theme.colors.primary.normal};
       }
