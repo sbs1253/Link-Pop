@@ -12,9 +12,7 @@ import { useformatTimestamp } from '@hooks/useformatTimestamp';
 import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
 const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
   const { handleSubscription, isPending, isError, error } = usePlaylistSubscriptionActions(playlist, user);
-
   const { handleLike, handleDislike } = useLikeDislikeActions(playlist, user);
-
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`/playlist/${playlist.id}`);

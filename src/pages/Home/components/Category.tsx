@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-const Category = () => {
+const Category = ({ handleCategory }: { handleCategory: (category: string) => void }) => {
   return (
     <CategoryContainer>
       <ul>
-        <li>All</li>
-        <li>New</li>
-        <li>Subscribe</li>
-        <li>Playlists</li>
+        <li onClick={() => handleCategory('All')}>All</li>
+        <li onClick={() => handleCategory('Subscribe')}>Subscribe</li>
+        <li onClick={() => handleCategory('MyPlaylist')}>MyPlaylist</li>
       </ul>
     </CategoryContainer>
   );
