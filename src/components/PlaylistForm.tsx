@@ -1,24 +1,25 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { usePlaylistAddQuery } from '../services/reactQuery/usePlaylistAddQuery';
-const PlaylistForm = ({ userId, playlistId, togglePlaylist }) => {
+const PlaylistForm = ({ userId, playlistId, setOpen }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const { mutate } = usePlaylistAddQuery();
-  const addPlaylist = (e) => {
+  const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const track = {
       title,
       url,
     };
-    console.log(track);
-    mutate(playlistId, track);
+
+    mutate({ userId, playlistId, track });
     setTitle('');
     setUrl('');
+    setOpen();
   };
   return (
-    <PlaylistFormContainer onClick={(e) => togglePlaylist(e)}>
+    <PlaylistFormContainer onClick={() => setOpen()}>
       <div className="form__modal" onClick={(e) => e.stopPropagation()}>
         <h3>재생목록 추가하기</h3>
         <form className="form__text" onSubmit={addPlaylist}>

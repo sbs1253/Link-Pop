@@ -5,13 +5,15 @@ import styled from 'styled-components';
 import PlayList from '@components/PlayList';
 import Tracks from '@pages/PlaylistDetail/components/Tracks';
 import Comment from '@pages/PlaylistDetail/components/Comment';
-import { useState } from 'react';
+
 import PlaylistForm from '@components/PlaylistForm';
 import { ControlPoint } from '@mui/icons-material';
+import { useToggle } from '@hooks/useToggle';
 
 const PlaylistDetail = () => {
   const { id } = useParams();
-  const [open, setOpen] = useState(false);
+
+  const [open, setOpen] = useToggle();
   const getPlaylist = usePlaylistStore((state) => state.getPlaylist);
   const { user } = useUserStore();
   if (!user) return <h1 color="red">Error: No user found</h1>;
@@ -19,11 +21,7 @@ const PlaylistDetail = () => {
     return <h1 color="red">Error: No playlist ID provided</h1>;
   }
   const playlist = getPlaylist(id);
-  const togglePlaylist = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setOpen(!open);
-    console.log(open);
-  };
+
   if (!playlist) return <h1 color="red">Error: No playlist ID provided</h1>;
 
   return (
@@ -31,10 +29,17 @@ const PlaylistDetail = () => {
       <PlayList playlist={playlist} user={user} />
       <PlaylistDetailList>
         <h3 className="detail__track">
-          <span>Tracks</span> <ControlPoint onClick={(e) => togglePlaylist(e)}></ControlPoint>
+          <span>Tracks</span>{' '}
+          <ControlPoint
+            className="listAdd"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen();
+            }}
+          ></ControlPoint>
         </h3>
-        {playlist.tracks?.map((playlist, index) => (
-          <Tracks key={index} title={playlist.title} url={playlist.url} index={index}></Tracks>
+        {Object.entries(playlist.tracks)?.map(([id, track], index) => (
+          <Tracks key={id} title={track.title} url={track.url} index={index}></Tracks>
         ))}
       </PlaylistDetailList>
       <PlaylistDetailComment>
@@ -47,16 +52,8 @@ const PlaylistDetail = () => {
             createdAt={playlist.createdAt}
           ></Comment>
         ))}
-        {playlist.comments?.map((playlist, index) => (
-          <Comment
-            key={index}
-            userId={playlist.userId}
-            comment={playlist.comment}
-            createdAt={playlist.createdAt}
-          ></Comment>
-        ))}
       </PlaylistDetailComment>
-      {open && <PlaylistForm userId={user.id} playlistId={playlist.id} togglePlaylist={togglePlaylist} />}
+      {open && <PlaylistForm userId={user.id} playlistId={playlist.id} setOpen={setOpen} />}
     </PlaylistDetailContainer>
   );
 };
@@ -73,6 +70,14 @@ const PlaylistDetailContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0px 10px;
+  }
+  & .listAdd {
+    cursor: pointer;
+    transition: color 0.15s;
+    &:hover {
+      color: ${(props) => props.theme.colors.primary.normal};
+    }
   }
 `;
 
