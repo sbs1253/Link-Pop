@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
-const DeleteButton = () => {
-  return <DeletebuttonItem>삭제</DeletebuttonItem>;
+const DeleteButton = ({ onClick }: { onClick: () => void }) => {
+  return <DeletebuttonItem onClick={onClick}>삭제</DeletebuttonItem>;
 };
 
 export default DeleteButton;

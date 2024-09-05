@@ -1,9 +1,8 @@
 import { get, increment, ref, update } from 'firebase/database';
 import { db } from '@services/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { PlaylistType, UserType } from '@store/types';
+import { UserType } from '@store/types';
 import { useUserStore } from '@store/useUserStore';
-import { usePlaylistStore } from '@store/usePlaylistStore';
 interface LikeDislikeData {
   userId: string;
   playlistId: string;
@@ -13,7 +12,6 @@ interface LikeDislikeData {
 
 const updateLikeDislike = async ({ userId, playlistId, action, currentState }: LikeDislikeData) => {
   const userRef = ref(db, `users/${userId}`);
-  const playlistRef = ref(db, `playlists/${playlistId}`);
 
   const updates: { [key: string]: unknown } = {};
   if (action === 'like') {
@@ -25,24 +23,23 @@ const updateLikeDislike = async ({ userId, playlistId, action, currentState }: L
   }
   await update(ref(db), updates);
 
-  const [userSnapshot, playlistSnapshot] = await Promise.all([get(userRef), get(playlistRef)]);
+  console.log((await get(userRef)).val());
+  const [userSnapshot] = await Promise.all([get(userRef)]);
   return {
     user: userSnapshot.val() as UserType,
-    playlist: playlistSnapshot.val() as PlaylistType,
   };
 };
 
 export const useLikeDislikeQuery = () => {
   const queryClient = useQueryClient();
-  const { setUser } = useUserStore();
-  const { updatePlaylist } = usePlaylistStore();
-
+  const setUser = useUserStore((state) => state.setUser);
+  // console.log(user);
   return useMutation({
     mutationFn: updateLikeDislike,
-    onSuccess: ({ user, playlist }, { playlistId }) => {
+    onSuccess: ({ user }, { userId, playlistId }) => {
       setUser(user);
-      updatePlaylist(playlistId, playlist);
-      queryClient.invalidateQueries({ queryKey: ['playlist'] });
+      queryClient.setQueryData(['user', userId], user);
+      queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] });
     },
     onError: (error) => {
       console.error('Failed to update like/dislike:', error);

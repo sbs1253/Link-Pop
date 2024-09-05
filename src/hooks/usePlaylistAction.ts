@@ -1,30 +1,35 @@
 import { useSubscribedQuery } from '@services/reactQuery/useSubscribedQuery';
 import { useLikeDislikeQuery } from '@services/reactQuery/useLikeDislikeQuery';
-import { PlaylistType, UserType, PlaylistsType } from '@store/types';
+import { UserType, PlaylistsType } from '@store/types';
 
-export const usePlaylistSubscriptionActions = (playlist: PlaylistType, user: UserType) => {
-  const { mutate: subscribeMutate, isPending, isError, error } = useSubscribedQuery();
+export const usePlaylistSubscriptionActions = (playlistId: string, user: UserType) => {
+  const {
+    mutate: subscribeMutate,
+    isPending: subscribeIsPending,
+    isError: subscribeIsError,
+    error: subscribeError,
+  } = useSubscribedQuery();
 
-  const handleSubscription = (e: React.MouseEvent) => {
+  const subscribePlaylist = (e: React.MouseEvent) => {
     e.stopPropagation();
     subscribeMutate({
       userId: user.id,
-      playlistId: playlist.id,
-      subscribed: user.subscribedPlaylists?.[playlist.id] || false,
+      playlistId: playlistId,
+      subscribed: user.subscribedPlaylists?.[playlistId] || false,
     });
   };
 
-  return { handleSubscription, isPending, isError, error };
+  return { subscribePlaylist, subscribeIsPending, subscribeIsError, subscribeError };
 };
 
-export const useLikeDislikeActions = (playlist: PlaylistType, user: UserType) => {
+export const useLikeDislikeActions = (playlistId: string, user: UserType) => {
   const { mutate, isPending, isError, error } = useLikeDislikeQuery();
-  const toggleLikeDislike = (list: PlaylistsType | undefined, action: 'like' | 'dislike') => {
+  const handleLikeDislike = (list: PlaylistsType | undefined, action: 'like' | 'dislike') => {
     if (!user) return;
-    const currentState = list?.[playlist.id] || false;
+    const currentState = list?.[playlistId] || false;
     mutate({
       userId: user.id,
-      playlistId: playlist.id,
+      playlistId: playlistId,
       action,
       currentState,
     });
@@ -32,12 +37,12 @@ export const useLikeDislikeActions = (playlist: PlaylistType, user: UserType) =>
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toggleLikeDislike(user.likedPlaylists, 'like');
+    handleLikeDislike(user.likedPlaylists, 'like');
   };
 
   const handleDislike = (e: React.MouseEvent) => {
     e.stopPropagation();
-    toggleLikeDislike(user.dislikedPlaylists, 'dislike');
+    handleLikeDislike(user.dislikedPlaylists, 'dislike');
   };
   return { handleLike, handleDislike, isPending, isError, error };
 };

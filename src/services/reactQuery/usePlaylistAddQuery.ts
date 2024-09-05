@@ -20,7 +20,7 @@ export const usePlaylistAddQuery = () => {
   return useMutation({
     mutationFn: (params: AddPlaylistParams) => addPlaylist(params),
     onSuccess: (playlist, { playlistId }) => {
-      queryClient.invalidateQueries({ queryKey: ['playlist '] });
+      queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] });
       updatePlaylist(playlistId, playlist);
     },
     onError: (error) => {

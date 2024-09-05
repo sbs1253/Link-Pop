@@ -1,10 +1,18 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { usePlaylistAddQuery } from '../services/reactQuery/usePlaylistAddQuery';
-const PlaylistForm = ({ userId, playlistId, setOpen }) => {
+import { useUserStore } from '@store/useUserStore';
+const PlaylistForm = ({
+  playlistId,
+  setOpen,
+}: {
+  playlistId: string;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const { mutate } = usePlaylistAddQuery();
+  const user = useUserStore((state) => state.user);
   const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -13,7 +21,7 @@ const PlaylistForm = ({ userId, playlistId, setOpen }) => {
       url,
     };
 
-    mutate({ userId, playlistId, track });
+    mutate({ userId: user.id, playlistId, track });
     setTitle('');
     setUrl('');
     setOpen();

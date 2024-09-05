@@ -1,18 +1,18 @@
-import { usePlaylistsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import { useAllPlaylistsQuery } from '@services/reactQuery/usePlaylistsQuery';
 import { useUserStore } from '@store/useUserStore';
 
 const useCategory = (category = 'All') => {
-  const { data, isLoading, error } = usePlaylistsQuery();
+  const { data, isLoading, error } = useAllPlaylistsQuery();
   const { user } = useUserStore();
-  // console.log(user);
+
   if (category === 'All') {
     return { data, isLoading, error, user };
   } else if (category === 'Subscribe') {
-    const subscribedPlaylists = data?.filter((playlist) => user?.subscribedPlaylists?.[playlist.id] || '');
-    return { data: subscribedPlaylists, isLoading, error, user };
+    const subscribedPlaylists = data?.filter((playlistId) => user?.subscribedPlaylists?.[playlistId] || '');
+    return { data: subscribedPlaylists, isLoading, error };
   } else if (category === 'MyPlaylist') {
-    const myPlaylists = data?.filter((playlist) => user?.createdPlaylists?.[playlist.id] || '');
-    return { data: myPlaylists, isLoading, error, user };
+    const myPlaylists = data?.filter((playlistId) => user?.createdPlaylists?.[playlistId] || '');
+    return { data: myPlaylists, isLoading, error };
   } else {
     return { data, isLoading, error, user };
   }

@@ -54,7 +54,7 @@ const FooterContainer = styled.nav`
   font-size: var(--font-size-body-regular);
   line-height: var(--line-height-body-regular);
   font-weight: var(--font-weight-body-regular);
-
+  background-color: ${(props) => props.theme.colors.background[1]};
   & ul {
     display: flex;
     justify-content: space-around;

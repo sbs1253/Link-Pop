@@ -1,6 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { usePlaylistStore } from '@store/usePlaylistStore';
-import { useUserStore } from '@store/useUserStore';
 import styled from 'styled-components';
 import PlayList from '@components/PlayList';
 import Tracks from '@pages/PlaylistDetail/components/Tracks';
@@ -9,24 +7,24 @@ import Comment from '@pages/PlaylistDetail/components/Comment';
 import PlaylistForm from '@components/PlaylistForm';
 import { ControlPoint } from '@mui/icons-material';
 import { useToggle } from '@hooks/useToggle';
+import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import LoadingCircular from '@components/LoadingCircular';
 
 const PlaylistDetail = () => {
-  const { id } = useParams();
-
+  const { id } = useParams<{ id: string }>();
+  const { data: playlist, isLoading, isFetching } = usePlaylistDetailsQuery(id as string);
   const [open, setOpen] = useToggle();
-  const getPlaylist = usePlaylistStore((state) => state.getPlaylist);
-  const { user } = useUserStore();
-  if (!user) return <h1 color="red">Error: No user found</h1>;
   if (!id) {
     return <h1 color="red">Error: No playlist ID provided</h1>;
   }
-  const playlist = getPlaylist(id);
-
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
   if (!playlist) return <h1 color="red">Error: No playlist ID provided</h1>;
-
   return (
     <PlaylistDetailContainer>
-      <PlayList playlist={playlist} user={user} />
+      {isFetching && <LoadingCircular />}
+      <PlayList playlistId={playlist.id} />
       <PlaylistDetailList>
         <h3 className="detail__track">
           <span>Tracks</span>{' '}
@@ -38,22 +36,33 @@ const PlaylistDetail = () => {
             }}
           ></ControlPoint>
         </h3>
-        {Object.entries(playlist.tracks)?.map(([id, track], index) => (
-          <Tracks key={id} title={track.title} url={track.url} index={index}></Tracks>
-        ))}
+        {playlist.tracks
+          ? Object.entries(playlist.tracks)?.map(([id, track], index) => (
+              <Tracks
+                key={id}
+                trackId={id}
+                playlistId={playlist.id}
+                title={track.title}
+                url={track.url}
+                index={index}
+              ></Tracks>
+            ))
+          : null}
       </PlaylistDetailList>
       <PlaylistDetailComment>
         <h3>Comment</h3>
-        {playlist.comments?.map((playlist, index) => (
-          <Comment
-            key={index}
-            userId={playlist.userId}
-            comment={playlist.comment}
-            createdAt={playlist.createdAt}
-          ></Comment>
-        ))}
+        {playlist.comments
+          ? playlist.comments?.map((playlist, index) => (
+              <Comment
+                key={index}
+                userId={playlist.userId}
+                comment={playlist.comment}
+                createdAt={playlist.createdAt}
+              ></Comment>
+            ))
+          : null}
       </PlaylistDetailComment>
-      {open && <PlaylistForm userId={user.id} playlistId={playlist.id} setOpen={setOpen} />}
+      {open && <PlaylistForm playlistId={playlist.id} setOpen={setOpen} />}
     </PlaylistDetailContainer>
   );
 };
@@ -66,6 +75,8 @@ const PlaylistDetailContainer = styled.div`
   gap: 20px;
   width: 100%;
   height: 100%;
+  padding-bottom: 200px;
+  overflow-y: scroll;
   & .detail__track {
     display: flex;
     justify-content: space-between;

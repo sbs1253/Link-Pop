@@ -15,7 +15,7 @@ export default Category;
 
 const CategoryContainer = styled.div`
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.background[3]};
   & ul {
     display: flex;

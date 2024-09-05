@@ -3,16 +3,20 @@ import { UserType } from '@store/types';
 import { persist, devtools, createJSONStorage } from 'zustand/middleware';
 
 interface Store {
-  user: UserType | null;
-  setUser: (user: UserType | null) => void;
+  user: UserType;
+  setUser: (user: UserType) => void;
 }
 
 export const useUserStore = create<Store>()(
   devtools(
     persist(
       (set) => ({
-        user: null,
-        setUser: (user) => set({ user }),
+        user: {} as UserType,
+        setUser: (newUser: UserType) => {
+          set((state) => ({
+            user: { ...state.user, ...newUser },
+          }));
+        },
       }),
       {
         name: 'user-storage',

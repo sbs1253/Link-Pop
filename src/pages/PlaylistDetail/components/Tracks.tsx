@@ -2,15 +2,29 @@ import styled from 'styled-components';
 import { TrackType } from '@store/types';
 import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
 import DeleteButton from '@pages/PlaylistDetail/components/DeleteButton';
-const Tracks = ({ title, url, index }: TrackType & { index: number }) => {
+import { useDeleteQuery } from '@services/reactQuery/useDeleteQuery';
+import LoadingCircular from '@components/LoadingCircular';
+
+const Tracks = ({
+  playlistId,
+  trackId,
+  title,
+  url,
+  index,
+}: TrackType & { trackId: string; playlistId: string; index: number }) => {
+  const { mutate, isPending } = useDeleteQuery();
+  const deleteTrack = () => {
+    mutate({ playlistId, trackId });
+  };
   return (
     <TracksContainer>
+      {isPending && <LoadingCircular />}
       <h4>Tracks: {index + 1}</h4>
       <a href={url}>
         <PlayCircleFilledWhiteOutlinedIcon />
         {title}
       </a>
-      <DeleteButton />
+      <DeleteButton onClick={deleteTrack} />
     </TracksContainer>
   );
 };

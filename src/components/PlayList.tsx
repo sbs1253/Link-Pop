@@ -6,20 +6,29 @@ import {
   MoreVertOutlined,
   ThumbDownOutlined,
 } from '@mui/icons-material';
-import { PlaylistType, UserType } from '@store/types';
 import { useNavigate } from 'react-router-dom';
 import { useformatTimestamp } from '@hooks/useformatTimestamp';
 import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
-const PlayList = ({ playlist, user }: { playlist: PlaylistType; user: UserType }) => {
-  const { handleSubscription, isPending, isError, error } = usePlaylistSubscriptionActions(playlist, user);
-  const { handleLike, handleDislike } = useLikeDislikeActions(playlist, user);
+import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import { useUserStore } from '@store/useUserStore';
+
+const PlayList = ({ playlistId }: { playlistId: string }) => {
   const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  const { subscribePlaylist, subscribeIsPending, subscribeError } = usePlaylistSubscriptionActions(playlistId, user);
+  const { handleLike, handleDislike } = useLikeDislikeActions(playlistId, user);
+  const { data: playlist, isLoading: playlistIsLoding, error: playlistError } = usePlaylistDetailsQuery(playlistId);
+
+  if (playlistError || subscribeError) return <div>Error loading playlist</div>;
+  if (!playlist) return null;
+
   const handleClick = () => {
-    navigate(`/playlist/${playlist.id}`);
+    navigate(`/playlist/${playlistId}`);
   };
+
   const navList = [
     {
-      onClick: handleSubscription,
+      onClick: subscribePlaylist,
       icon: (
         <FavoriteBorderOutlined
           sx={user.subscribedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
