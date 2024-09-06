@@ -4,7 +4,7 @@ import PlayList from '@components/PlayList';
 import Tracks from '@pages/PlaylistDetail/components/Tracks';
 import Comment from '@pages/PlaylistDetail/components/Comment';
 
-import PlaylistForm from '@components/PlaylistForm';
+import PlaylistForm from '@pages/PlaylistDetail/components/TrackAddForm';
 import { ControlPoint } from '@mui/icons-material';
 import { useToggle } from '@hooks/useToggle';
 import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';

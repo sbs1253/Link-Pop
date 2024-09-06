@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { usePlaylistAddQuery } from '../services/reactQuery/usePlaylistAddQuery';
-import { useUserStore } from '@store/useUserStore';
+import { usePlaylistAddQuery } from '../../../services/reactQuery/usePlaylistAddQuery';
 const PlaylistForm = ({
   playlistId,
   setOpen,
@@ -12,16 +11,14 @@ const PlaylistForm = ({
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const { mutate } = usePlaylistAddQuery();
-  const user = useUserStore((state) => state.user);
+
   const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const track = {
       title,
       url,
     };
-
-    mutate({ userId: user.id, playlistId, track });
+    mutate({ playlistId, track });
     setTitle('');
     setUrl('');
     setOpen();
