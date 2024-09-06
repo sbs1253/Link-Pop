@@ -12,24 +12,10 @@ const Home = () => {
   const handleCategory = (category: string) => {
     setSelectedCategory(category);
   };
+
   return (
     <HomeContainer>
       <Category handleCategory={handleCategory} />
-      {data?.map((playlistId) => (
-        <PlayList key={playlistId} playlistId={playlistId} />
-      ))}
-      {data?.map((playlistId) => (
-        <PlayList key={playlistId} playlistId={playlistId} />
-      ))}
-      {data?.map((playlistId) => (
-        <PlayList key={playlistId} playlistId={playlistId} />
-      ))}
-      {data?.map((playlistId) => (
-        <PlayList key={playlistId} playlistId={playlistId} />
-      ))}
-      {data?.map((playlistId) => (
-        <PlayList key={playlistId} playlistId={playlistId} />
-      ))}
       {data?.map((playlistId) => (
         <PlayList key={playlistId} playlistId={playlistId} />
       ))}

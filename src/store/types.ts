@@ -12,6 +12,7 @@ export interface PlaylistsType {
   [key: string]: boolean;
 }
 export interface TrackType {
+  [key: string]: string;
   title: string;
   url: string;
 }
@@ -28,13 +29,22 @@ export interface PlaylistType {
   description: string;
   creatorId: string;
   creator: PlaylistCreator;
-  tracks: TrackType[];
+  tracks: TrackType;
   comments: CommentType[];
   likes: number;
   dislikes: number;
   createdAt: number;
 }
-
+export interface DefaultPlaylistType {
+  comments: CommentType[];
+  createdAt: number;
+  creatorId: string;
+  description: string;
+  dislikes: number;
+  likes: number;
+  title: string;
+  tracks: { [key: string]: string };
+}
 export interface PlaylistCreator {
   id: string;
   username: string;

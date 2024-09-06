@@ -1,18 +1,46 @@
 import styled from 'styled-components';
-import { NotificationsNoneOutlined, Search } from '@mui/icons-material';
+import { NotificationsNoneOutlined, Search, LogoutOutlined } from '@mui/icons-material';
+import { useUserStore } from '@store/useUserStore';
+import { usePlaylistStore } from '@store/usePlaylistStore';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const navbarAction = [
+    {
+      onClick: () => {
+        return null;
+      },
+      icon: <Search></Search>,
+    },
+    {
+      onClick: () => {
+        return null;
+      },
+      icon: <NotificationsNoneOutlined></NotificationsNoneOutlined>,
+    },
+    {
+      onClick: () => {
+        useUserStore.persist.clearStorage();
+        usePlaylistStore.persist.clearStorage();
+        navigate('/login');
+      },
+      icon: <LogoutOutlined></LogoutOutlined>,
+    },
+  ];
   return (
     <HeaderContainer>
       <div className="header__logo">
         <img src="assets/logo.png" alt="logo" />
         <span>Studio</span>
       </div>
-      <nav className="header__nav">
-        <Search></Search>
-        <NotificationsNoneOutlined></NotificationsNoneOutlined>
-        <img src="assets/profile.jpg" alt="profile" />
-      </nav>
+      <ul className="header__nav">
+        {navbarAction.map((action, index) => (
+          <li key={index} onClick={action.onClick}>
+            {action.icon}
+          </li>
+        ))}
+      </ul>
     </HeaderContainer>
   );
 };

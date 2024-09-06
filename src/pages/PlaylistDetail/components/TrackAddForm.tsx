@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { usePlaylistAddQuery } from '../../../services/reactQuery/usePlaylistAddQuery';
+import { useTrackAddQuery } from '@services/reactQuery/useTrackAddQuery';
 const PlaylistForm = ({
   playlistId,
   setOpen,
@@ -10,7 +10,7 @@ const PlaylistForm = ({
 }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
-  const { mutate } = usePlaylistAddQuery();
+  const { mutate } = useTrackAddQuery();
 
   const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,23 +21,27 @@ const PlaylistForm = ({
     mutate({ playlistId, track });
     setTitle('');
     setUrl('');
-    setOpen();
+    setOpen(false);
   };
   return (
-    <PlaylistFormContainer onClick={() => setOpen()}>
+    <PlaylistFormContainer onClick={() => setOpen(true)}>
       <div className="form__modal" onClick={(e) => e.stopPropagation()}>
-        <h3>재생목록 추가하기</h3>
-        <form className="form__text" onSubmit={addPlaylist}>
-          <label htmlFor="title">Title</label>
-          <input
-            id="title"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter Title"
-          />
-          <label htmlFor="url">Url</label>
-          <input id="url" name="url" placeholder="Enter Url" value={url} onChange={(e) => setUrl(e.target.value)} />
+        <h3 className="form__title">재생목록 추가하기</h3>
+        <form className="form__box" onSubmit={addPlaylist}>
+          <div className="form__text">
+            <label htmlFor="title">Title</label>
+            <input
+              id="title"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter Title"
+            />
+          </div>
+          <div className="form__text">
+            <label htmlFor="url">Url</label>
+            <input id="url" name="url" placeholder="Enter Url" value={url} onChange={(e) => setUrl(e.target.value)} />
+          </div>
           <button type="submit">추가</button>
         </form>
       </div>
@@ -63,20 +67,29 @@ const PlaylistFormContainer = styled.div`
     flex-direction: column;
     width: 80%;
     height: 50%;
+    padding: 20px;
     border-radius: 10px;
     background-color: ${(props) => props.theme.colors.background[3]};
     color: ${(props) => props.theme.colors.text.title};
 
-    & h3 {
-      margin: 10px auto;
+    & .form__title {
+      width: 100%;
+      text-align: center;
+      margin: 10px 0;
     }
-    & .form__text {
+    & .form__box {
       position: relative;
       display: flex;
       flex-direction: column;
+      gap: 18px;
 
+      & .form__text {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
       & input {
-        border: solid 1.5px #9e9e9e;
+        border: solid 1.5px ${(props) => props.theme.colors.text.caption};
         border-radius: 1rem;
         background: none;
         padding: 10px;
@@ -84,17 +97,22 @@ const PlaylistFormContainer = styled.div`
         color: ${(props) => props.theme.colors.text.title};
       }
       & label {
+        padding-left: 5px;
+        color: ${(props) => props.theme.colors.text.title};
       }
 
       & button {
-        background-color: #1db954;
+        background-color: ${(props) => props.theme.colors.success.normal};
         color: white;
         border: none;
         border-radius: 4px;
         padding: 10px;
         cursor: pointer;
+        &:hover {
+          background-color: ${(props) => props.theme.colors.success.hover};
+        }
         &:disabled {
-          background-color: #1a7f3b;
+          background-color: ${(props) => props.theme.colors.success.disabled};
           cursor: not-allowed;
         }
       }

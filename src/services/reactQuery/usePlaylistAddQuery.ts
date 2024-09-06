@@ -1,26 +1,23 @@
-import { ref, push, get } from 'firebase/database';
+import { ref, push } from 'firebase/database';
 import { db } from '@services/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-interface AddPlaylistParams {
-  playlistId: string;
-  track: { title: string; url: string };
-}
-const addPlaylist = async ({ playlistId, track }: AddPlaylistParams) => {
-  const playlistRef = ref(db, `playlists/${playlistId}/tracks`);
-  await push(playlistRef, track);
-  return (await get(ref(db, `playlists/${playlistId}`))).val();
+import { DefaultPlaylistType } from '@store/types';
+
+const addPlaylist = async (newPlaylist: DefaultPlaylistType) => {
+  const playlistRef = ref(db, `playlists`);
+  await push(playlistRef, newPlaylist);
 };
 
 export const usePlaylistAddQuery = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: AddPlaylistParams) => addPlaylist(params),
-    onSuccess: (_, { playlistId }) => {
-      queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] });
+    mutationFn: (params: DefaultPlaylistType) => addPlaylist(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
     },
     onError: (error) => {
-      console.error('Failed to update subscription:', error);
+      console.error('Failed to add playlist:', error);
     },
   });
 };

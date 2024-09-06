@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { SpaceDashboardOutlined, ControlPoint, LogoutOutlined } from '@mui/icons-material';
-import { useUserStore } from '@store/useUserStore';
-import { usePlaylistStore } from '@store/usePlaylistStore';
+import { SpaceDashboardOutlined, ControlPoint } from '@mui/icons-material';
+import PlaylistAddForm from '@components/PlaylistAddForm';
+import { useToggle } from '@hooks/useToggle';
+
 const Footer = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useToggle();
 
   const buttons = [
     {
@@ -15,21 +17,24 @@ const Footer = () => {
       text: 'Home',
     },
     {
+      onClick: () => {
+        setOpen(true);
+      },
       icon: <ControlPoint className="listAdd"></ControlPoint>,
       text: '',
     },
     {
       onClick: () => {
-        useUserStore.persist.clearStorage();
-        usePlaylistStore.persist.clearStorage();
-        navigate('/login');
+        navigate('/profile');
       },
-      icon: <LogoutOutlined></LogoutOutlined>,
-      text: 'Logout',
+      icon: <img src="assets/profile.jpg" alt="profile" />,
+      text: 'Profile',
     },
   ];
+  console.log(open);
   return (
     <FooterContainer>
+      {open && <PlaylistAddForm setOpen={() => setOpen()} />}
       <ul>
         {buttons.map((button, index) => (
           <li key={index} onClick={button.onClick}>

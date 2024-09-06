@@ -32,7 +32,7 @@ const PlaylistDetail = () => {
             className="listAdd"
             onClick={(e) => {
               e.stopPropagation();
-              setOpen();
+              setOpen(true);
             }}
           ></ControlPoint>
         </h3>
@@ -62,7 +62,9 @@ const PlaylistDetail = () => {
             ))
           : null}
       </PlaylistDetailComment>
-      {open && <PlaylistForm playlistId={playlist.id} setOpen={setOpen} />}
+      {open && (
+        <PlaylistForm playlistId={playlist.id} setOpen={setOpen as React.Dispatch<React.SetStateAction<boolean>>} />
+      )}
     </PlaylistDetailContainer>
   );
 };

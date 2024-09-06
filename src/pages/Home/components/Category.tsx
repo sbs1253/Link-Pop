@@ -33,7 +33,8 @@ const CategoryContainer = styled.div`
       font-weight: var(--font-weight-body-regular);
       cursor: pointer;
       transition: color 0.3s;
-      &:hover {
+      &:hover,
+      &:active {
         color: ${({ theme }) => theme.colors.primary.normal};
         border-bottom: 2px solid ${({ theme }) => theme.colors.primary.normal};
       }

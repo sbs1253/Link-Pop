@@ -6,12 +6,11 @@ const DeleteButton = ({ onClick }: { onClick: () => void }) => {
 export default DeleteButton;
 
 const DeletebuttonItem = styled.button`
-  position: absolute;
-  right: 10px;
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
   background-color: ${(props) => props.theme.colors.primary.normal};
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.15s;
 
