@@ -1,11 +1,24 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+
 const Category = ({ handleCategory }: { handleCategory: (category: string) => void }) => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const handleClick = (category: string) => {
+    setSelectedCategory(category);
+    handleCategory(category);
+  };
   return (
     <CategoryContainer>
       <ul>
-        <li onClick={() => handleCategory('All')}>All</li>
-        <li onClick={() => handleCategory('Subscribe')}>Subscribe</li>
-        <li onClick={() => handleCategory('MyPlaylist')}>MyPlaylist</li>
+        <li onClick={() => handleClick('All')} className={selectedCategory === 'All' ? 'active' : ''}>
+          All
+        </li>
+        <li onClick={() => handleClick('Subscribe')} className={selectedCategory === 'Subscribe' ? 'active' : ''}>
+          Subscribe
+        </li>
+        <li onClick={() => handleClick('MyPlaylist')} className={selectedCategory === 'MyPlaylist' ? 'active' : ''}>
+          MyPlaylist
+        </li>
       </ul>
     </CategoryContainer>
   );
@@ -34,7 +47,7 @@ const CategoryContainer = styled.div`
       cursor: pointer;
       transition: color 0.3s;
       &:hover,
-      &:active {
+      &.active {
         color: ${({ theme }) => theme.colors.primary.normal};
         border-bottom: 2px solid ${({ theme }) => theme.colors.primary.normal};
       }

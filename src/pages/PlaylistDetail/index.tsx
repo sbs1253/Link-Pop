@@ -14,6 +14,7 @@ const PlaylistDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: playlist, isLoading, isFetching } = usePlaylistDetailsQuery(id as string);
   const [open, setOpen] = useToggle();
+  console.log(playlist);
   if (!id) {
     return <h1 color="red">Error: No playlist ID provided</h1>;
   }
@@ -27,7 +28,7 @@ const PlaylistDetail = () => {
       <PlayList playlistId={playlist.id} />
       <PlaylistDetailList>
         <h3 className="detail__track">
-          <span>Tracks</span>{' '}
+          <span>Tracks</span>
           <ControlPoint
             className="listAdd"
             onClick={(e) => {
@@ -105,5 +106,5 @@ const PlaylistDetailComment = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0;
+  padding: 0 10px;
 `;

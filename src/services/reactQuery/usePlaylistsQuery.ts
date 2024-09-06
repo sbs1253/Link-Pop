@@ -8,13 +8,12 @@ const fetchAllPlaylists = async () => {
   const queryRef = query(playlistsRef, orderByChild('createdAt'));
   const snapshot = await get(queryRef);
   const playlistsData = snapshot.val() as { [key: string]: PlaylistType };
+
   const sortedPlaylists = Object.entries(playlistsData)
-    .map(([id, playlist]) => ({ id, ...playlist }))
+    .map(([id, playlist]) => ({ ...playlist, id }))
     .sort((a, b) => b.createdAt - a.createdAt);
-  console.log(sortedPlaylists.map((playlist) => playlist.id));
-  console.log(Object.keys(playlistsData).map((id) => id));
+
   return sortedPlaylists.map((playlist) => playlist.id);
-  // return Object.keys(playlistsData).map((id) => id);
 };
 
 const fetchPlaylistDetails = async (playlistId: string) => {
