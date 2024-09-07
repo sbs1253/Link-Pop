@@ -75,12 +75,13 @@ const PlaylistAddFormContainer = styled.div`
     display: absolute;
     flex-direction: column;
     width: 80%;
-    min-height: 30%;
+    max-width: 500px;
+    height: 50%;
     padding: 20px;
     border-radius: 10px;
     background-color: ${(props) => props.theme.colors.background[3]};
     color: ${(props) => props.theme.colors.text.title};
-
+    overflow-y: scroll;
     & .form__title {
       width: 100%;
       text-align: center;

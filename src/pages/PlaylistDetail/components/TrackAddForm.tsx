@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useTrackAddQuery } from '@services/reactQuery/useTrackAddQuery';
 
-const PlaylistForm = ({
+const PlaylistTrackForm = ({
   playlistId,
   setOpen,
 }: {
@@ -24,7 +24,7 @@ const PlaylistForm = ({
     setOpen(false);
   };
   return (
-    <PlaylistFormContainer onClick={() => setOpen(true)}>
+    <PlaylistTrackFormContainer onClick={() => setOpen(false)}>
       <div className="form__modal" onClick={(e) => e.stopPropagation()}>
         <h3 className="form__title">재생목록 추가하기</h3>
         <form className="form__box" onSubmit={addPlaylist}>
@@ -45,14 +45,14 @@ const PlaylistForm = ({
           <button type="submit">추가</button>
         </form>
       </div>
-    </PlaylistFormContainer>
+    </PlaylistTrackFormContainer>
   );
 };
 
-export default PlaylistForm;
+export default PlaylistTrackForm;
 
-const PlaylistFormContainer = styled.div`
-  position: absolute;
+const PlaylistTrackFormContainer = styled.div`
+  position: fixed;
   top: 0%;
   left: 0%;
   width: 100%;
@@ -61,11 +61,12 @@ const PlaylistFormContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
   & .form__modal {
     display: absolute;
     flex-direction: column;
+    overflow-y: scroll;
     width: 80%;
+    max-width: 500px;
     height: 50%;
     padding: 20px;
     border-radius: 10px;

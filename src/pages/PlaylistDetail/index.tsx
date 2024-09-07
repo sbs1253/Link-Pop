@@ -4,7 +4,7 @@ import PlayList from '@components/PlayList';
 import Tracks from '@pages/PlaylistDetail/components/Tracks';
 import Comment from '@pages/PlaylistDetail/components/Comment';
 
-import PlaylistForm from '@pages/PlaylistDetail/components/TrackAddForm';
+import PlaylistTrackForm from '@pages/PlaylistDetail/components/TrackAddForm';
 import { ControlPoint } from '@mui/icons-material';
 import { useToggle } from '@hooks/useToggle';
 import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
@@ -64,7 +64,10 @@ const PlaylistDetail = () => {
           : null}
       </PlaylistDetailComment>
       {open && (
-        <PlaylistForm playlistId={playlist.id} setOpen={setOpen as React.Dispatch<React.SetStateAction<boolean>>} />
+        <PlaylistTrackForm
+          playlistId={playlist.id}
+          setOpen={setOpen as React.Dispatch<React.SetStateAction<boolean>>}
+        />
       )}
     </PlaylistDetailContainer>
   );
