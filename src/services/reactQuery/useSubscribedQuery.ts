@@ -1,8 +1,8 @@
-import { get, ref, update } from 'firebase/database';
+import { ref, update } from 'firebase/database';
 import { db } from '@services/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UserType } from '@store/types';
 import { useUserStore } from '@store/useUserStore';
+import { fetchUserDataFirebase } from '@services/api/userService';
 
 interface SubscribeData {
   userId: string;
@@ -14,8 +14,8 @@ interface SubscribeData {
 const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeData) => {
   const userRef = ref(db, `users/${userId}/subscribedPlaylists`);
   await update(userRef, { [playlistId]: !subscribed });
-  const userSnapshot = await get(ref(db, `users/${userId}`));
-  return userSnapshot.val() as UserType;
+  const updatedUserData = await fetchUserDataFirebase(userId);
+  return updatedUserData;
 };
 
 export const useSubscribedQuery = () => {

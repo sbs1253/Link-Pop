@@ -8,7 +8,7 @@ interface AddTrackParams {
 const addTrack = async ({ playlistId, track }: AddTrackParams) => {
   const playlistRef = ref(db, `playlists/${playlistId}/tracks`);
   await push(playlistRef, track);
-  return (await get(ref(db, `playlists/${playlistId}`))).val();
+  return playlistId;
 };
 
 export const useTrackAddQuery = () => {
@@ -16,8 +16,8 @@ export const useTrackAddQuery = () => {
 
   return useMutation({
     mutationFn: (params: AddTrackParams) => addTrack(params),
-    onSuccess: (_, { playlistId }) => {
-      queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] });
+    onSuccess: (playlistId) => {
+      queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
     },
     onError: (error) => {
       console.error('Failed to update subscription:', error);

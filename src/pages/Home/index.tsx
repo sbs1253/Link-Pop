@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import useCategory from '@hooks/useCategory';
 import LoadingCircular from '@components/LoadingCircular';
+import { useUserStore } from '@store/useUserStore';
 const Home = () => {
+  console.log(useUserStore((state) => state.user));
   const [selectedCategory, setSelectedCategory] = useState('All');
   const { data, isLoading, error } = useCategory(selectedCategory);
   if (isLoading) return <LoadingCircular />;
@@ -12,7 +14,6 @@ const Home = () => {
   const handleCategory = (category: string) => {
     setSelectedCategory(category);
   };
-
   return (
     <HomeContainer>
       <Category handleCategory={handleCategory} />

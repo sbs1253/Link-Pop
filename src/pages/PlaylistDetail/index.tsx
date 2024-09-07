@@ -14,7 +14,7 @@ const PlaylistDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: playlist, isLoading, isFetching } = usePlaylistDetailsQuery(id as string);
   const [open, setOpen] = useToggle();
-  console.log(playlist);
+
   if (!id) {
     return <h1 color="red">Error: No playlist ID provided</h1>;
   }

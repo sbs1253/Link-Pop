@@ -47,8 +47,7 @@ export const useAllPlaylistsQuery = () => {
 // 개별 플레이리스트 상세 정보를 가져오는 쿼리 훅
 export const usePlaylistDetailsQuery = (playlistId: string) => {
   return useQuery({
-    queryKey: ['playlist', playlistId],
+    queryKey: ['playlists', playlistId],
     queryFn: () => fetchPlaylistDetails(playlistId),
-    enabled: !!playlistId,
   });
 };

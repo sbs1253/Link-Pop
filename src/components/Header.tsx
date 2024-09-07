@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       <div className="header__logo">
-        <img src="assets/logo.png" alt="logo" />
+        <img src="/assets/logo.png" alt="logo" />
         <span>Studio</span>
       </div>
       <ul className="header__nav">

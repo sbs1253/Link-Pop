@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useTrackAddQuery } from '@services/reactQuery/useTrackAddQuery';
+
 const PlaylistForm = ({
   playlistId,
   setOpen,
@@ -11,7 +12,6 @@ const PlaylistForm = ({
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const { mutate } = useTrackAddQuery();
-
   const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const track = {

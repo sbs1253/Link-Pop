@@ -39,7 +39,7 @@ export const useLikeDislikeQuery = () => {
     onSuccess: ({ user }, { userId, playlistId }) => {
       setUser(user);
       queryClient.setQueryData(['user', userId], user);
-      queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] });
+      queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
     },
     onError: (error) => {
       console.error('Failed to update like/dislike:', error);

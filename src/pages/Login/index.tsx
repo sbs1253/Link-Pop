@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useLoginQuery } from '@services/reactQuery/useLoginQuery';
 import { Navigate } from 'react-router-dom';
+import LoadingCircular from '@components/LoadingCircular';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ export const Login: React.FC = () => {
     mutate({ email, password });
   };
   if (isPending) {
-    return <div>로그인 중...</div>;
+    return <LoadingCircular />;
   }
   if (isError) {
     return <div>{error.message}</div>;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useDeleteQuery } from '@services/reactQuery/useDeleteQuery';
+import { useDeleteTrackQuery } from '@services/reactQuery/useDeleteQuery';
 import { TrackType } from '@store/types';
 import DeleteButton from '@pages/PlaylistDetail/components/DeleteButton';
 import LoadingCircular from '@components/LoadingCircular';
@@ -15,7 +15,7 @@ const Tracks = ({
   const [more, setMore] = useState(false);
   const titleRef = useRef(null);
   const [moreButton, setMoreButton] = useState(false);
-  const { mutate, isPending } = useDeleteQuery();
+  const { mutate, isPending } = useDeleteTrackQuery();
   const deleteTrack = () => {
     mutate({ playlistId, trackId });
   };
@@ -43,7 +43,7 @@ const Tracks = ({
       {isPending && <LoadingCircular />}
       <h4>Tracks: {index + 1}</h4>
       <a ref={titleRef} href={url} className={`track__title ${more ? 'more' : ''}`}>
-        {title}1231231232133211213312123
+        {title}
       </a>
       {moreButton && (
         <span className="track__more" onClick={() => setMore((prev) => !prev)}>
@@ -83,6 +83,7 @@ const TracksContainer = styled.li`
     transition: all 0.35s;
     text-overflow: ellipsis;
     overflow: hidden;
+    white-space: nowrap;
     &.more {
       white-space: normal;
       overflow-wrap: break-word;

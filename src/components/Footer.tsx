@@ -27,7 +27,7 @@ const Footer = () => {
       onClick: () => {
         navigate('/profile');
       },
-      icon: <img src="assets/profile.jpg" alt="profile" />,
+      icon: <img src="/assets/profile.jpg" alt="profile" />,
       text: 'Profile',
     },
   ];

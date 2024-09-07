@@ -7,21 +7,33 @@ import {
   ThumbDownOutlined,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import { useDeletePlaylistQuery } from '@services/reactQuery/useDeleteQuery';
+import { useUserStore } from '@store/useUserStore';
 import { useformatTimestamp } from '@hooks/useformatTimestamp';
 import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
-import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
-import { useUserStore } from '@store/useUserStore';
+import { useToggle } from '@hooks/useToggle';
+import LoadingCircular from '@components/LoadingCircular';
+import { MouseEvent } from 'react';
 
 const PlayList = ({ playlistId }: { playlistId: string }) => {
   const navigate = useNavigate();
+  const [toggle, setToggle] = useToggle();
   const user = useUserStore((state) => state.user);
-  const { subscribePlaylist, subscribeIsPending, subscribeError } = usePlaylistSubscriptionActions(playlistId, user);
+
+  const { subscribePlaylist, subscribeError } = usePlaylistSubscriptionActions(playlistId, user);
   const { handleLike, handleDislike } = useLikeDislikeActions(playlistId, user);
   const { data: playlist, isLoading: playlistIsLoding, error: playlistError } = usePlaylistDetailsQuery(playlistId);
+  const { mutate, isPending } = useDeletePlaylistQuery();
 
+  if (playlistIsLoding || isPending) return <LoadingCircular />;
   if (playlistError || subscribeError) return <div>Error loading playlist</div>;
   if (!playlist) return null;
 
+  const handleDelete = (e: MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    e.stopPropagation();
+    mutate(playlistId);
+  };
   const handleClick = () => {
     navigate(`/playlist/${playlistId}`);
   };
@@ -62,6 +74,7 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
       <div className="playlist__info">
         <div>
           <h4>{playlist.title}</h4>
+          <p>{playlist.description}</p>
           <p>{useformatTimestamp(playlist.createdAt)}</p>
         </div>
         <ul>
@@ -73,7 +86,19 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
           ))}
         </ul>
         <p className="playlist__creator">작성자 : {playlist.creator.username}</p>
-        <MoreVertOutlined className="playlist__more"></MoreVertOutlined>
+        <div className="playlist__more">
+          <PlayListMoreBtn
+            onClick={(e) => {
+              e.stopPropagation();
+              setToggle();
+            }}
+            className="playlist__more-button"
+          ></PlayListMoreBtn>
+          <div className={`playlist__action ${toggle && 'active'}`}>
+            <span>수정</span>
+            <span onClick={(e) => handleDelete(e)}>삭제</span>
+          </div>
+        </div>
       </div>
     </PlayListContainer>
   );
@@ -145,9 +170,37 @@ const PlayListContainer = styled.div`
       top: 10px;
       right: 10px;
       transition: color 0.3s;
-      &:hover {
-        color: ${(props) => props.theme.colors.primary.normal};
+
+      & .playlist__action {
+        display: none;
+        background-color: ${(props) => props.theme.colors.background[3]};
+        border-radius: 5px;
+        padding: 10px;
+        z-index: 1;
+        & span {
+          white-space: nowrap;
+          cursor: pointer;
+          transition: color 0.3s;
+          &:hover {
+            color: ${(props) => props.theme.colors.primary.normal};
+          }
+        }
+        &.active {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          position: absolute;
+          top: 30px;
+          right: 0;
+          color: ${(props) => props.theme.colors.text.body};
+        }
       }
     }
+  }
+`;
+
+const PlayListMoreBtn = styled(MoreVertOutlined)`
+  &:hover {
+    color: ${(props) => props.theme.colors.primary.normal};
   }
 `;
