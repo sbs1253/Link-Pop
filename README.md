@@ -6,7 +6,7 @@
 <!--프로젝트 대문 이미지-->
 ![프로젝트 목업](https://github.com/user-attachments/assets/24ec2279-366e-42b7-a2d7-4ba5b14dbc9d)
 
-### [프로젝트 사이트](https://toy-project-3.web.app/)
+### <a href="https://toy-project-3.web.app/" target="_blank">프로젝트 사이트</a>
 #### ID: `test1@gmail.com` PW: `123123`
 <!--목차-->
 # 목차
