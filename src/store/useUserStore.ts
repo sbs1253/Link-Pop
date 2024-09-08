@@ -4,7 +4,9 @@ import { persist, devtools, createJSONStorage } from 'zustand/middleware';
 
 interface Store {
   user: UserType;
+  isLogin: boolean;
   setUser: (user: UserType) => void;
+  setIsLogin: (isLogin: boolean) => void;
 }
 
 export const useUserStore = create<Store>()(
@@ -12,10 +14,14 @@ export const useUserStore = create<Store>()(
     persist(
       (set) => ({
         user: {} as UserType,
+        isLogin: false,
         setUser: (newUser: UserType) => {
           set((state) => ({
             user: { ...state.user, ...newUser },
           }));
+        },
+        setIsLogin: (state: boolean) => {
+          set({ isLogin: state });
         },
       }),
       {

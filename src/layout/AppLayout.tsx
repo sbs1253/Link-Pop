@@ -4,8 +4,9 @@ import { useUserStore } from '@store/useUserStore';
 import { Navigate, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 function AppLayout() {
-  const user = useUserStore((state) => state.user);
-  if (Object.keys(user).length === 0) {
+  const user = useUserStore((state) => state.isLogin);
+  console.log(user);
+  if (!user) {
     return <Navigate to={{ pathname: '/login' }} />;
   }
 

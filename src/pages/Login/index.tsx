@@ -4,11 +4,14 @@ import { useLoginQuery } from '@services/reactQuery/useLoginQuery';
 import { useNavigate } from 'react-router-dom';
 import LoadingCircular from '@components/LoadingCircular';
 import NotFound from '@pages/NotFound';
+import { useUserStore } from '@store/useUserStore';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { mutate, isPending, isError, error, isSuccess } = useLoginQuery();
+  const setIsLogin = useUserStore((state) => state.setIsLogin);
+
   const navigate = useNavigate();
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,6 +23,7 @@ export const Login: React.FC = () => {
   if (isError) return <NotFound messege={error.message} />;
 
   if (isSuccess) {
+    setIsLogin(true);
     navigate('/', { replace: true });
   }
   return (

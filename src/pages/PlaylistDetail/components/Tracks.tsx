@@ -47,7 +47,7 @@ const Tracks = ({
     <TracksContainer>
       {isPending && <LoadingCircular />}
       <h4>Tracks: {index + 1}</h4>
-      <a ref={titleRef} href={url} className={`track__title ${more ? 'more' : ''}`}>
+      <a target="_blank" ref={titleRef} href={url} className={`track__title ${more ? 'more' : ''}`}>
         {title}
       </a>
       {moreButton && (
