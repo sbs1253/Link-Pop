@@ -9,14 +9,16 @@ const theme = {
       caption: '#8F8F8F',
     },
     background: {
-      primary: '#282929',
-      secondary: '#3B3D3D',
-      tertiary: '#4D4F4F',
+      1: '#0f0f0f',
+      2: '#1e1e1e',
+      3: '#282929',
+      4: '#3B3D3D',
+      5: '#4D4F4F',
     },
     stroke: {
-      primary: '#353D3D',
-      secondary: '#535252',
-      tertiary: '#707070',
+      1: '#353D3D',
+      2: '#535252',
+      3: '#707070',
     },
     primary: {
       normal: '#D33F40',
