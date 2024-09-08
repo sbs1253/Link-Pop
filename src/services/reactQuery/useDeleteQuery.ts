@@ -14,6 +14,7 @@ const deleteTrackList = async ({ playlistId, trackId }: DeleteTrackListProps) =>
   await remove(trackListRef);
 };
 
+// 트랙 삭제 쿼리
 export const useDeleteTrackQuery = () => {
   const queryClient = useQueryClient();
   return useMutation({

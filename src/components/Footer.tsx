@@ -31,7 +31,6 @@ const Footer = () => {
       text: 'Profile',
     },
   ];
-  console.log(open);
   return (
     <FooterContainer>
       {open && <PlaylistForm setOpen={() => setOpen()} />}

@@ -7,6 +7,7 @@ import { useToggle } from '@hooks/useToggle';
 import { useUserStore } from '@store/useUserStore';
 import { useState } from 'react';
 import { useCommentUpdateQuery } from '@services/reactQuery/useCommentUpdateQuery';
+import { useCommentDeleteQuery } from '@services/reactQuery/useCommentDeleteQuery';
 
 const Comment = ({
   userId,
@@ -20,19 +21,21 @@ const Comment = ({
   const [editMode, setEditMode] = useState(false);
   const [newComment, setNewComment] = useState(comment);
   const { mutate } = useCommentUpdateQuery();
+  const { mutate: deleteMutate } = useCommentDeleteQuery();
   const user = useUserStore((state) => state.user);
   if (!data) return null;
   const handleEditClick = () => {
     setEditMode(true);
     setToggle();
   };
-  console.log(playlistId);
   const handleSave = () => {
     const updateComment = { userId, comment: newComment, createdAt: Date.now() };
     mutate({ playlistId, commentId, comment: updateComment });
     setEditMode(false);
   };
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    deleteMutate({ playlistId, commentId });
+  };
   return (
     <CommentContainer>
       <img src={data.img} alt="profile" />
