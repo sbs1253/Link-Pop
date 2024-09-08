@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
+  const logout = useUserStore((state) => state.logout);
   const navbarAction = [
     {
       onClick: () => {
@@ -20,6 +21,7 @@ const Header = () => {
     },
     {
       onClick: () => {
+        logout();
         useUserStore.persist.clearStorage();
         navigate('/login');
       },
