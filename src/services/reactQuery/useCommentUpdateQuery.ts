@@ -3,12 +3,12 @@ import { db } from '@src/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CommentType } from 'src/store/types';
 
-interface UpdateCommentProps {
+interface UpdateCommentParams {
   playlistId: string;
   commentId: string;
   comment: CommentType;
 }
-const updateComment = async ({ playlistId, commentId, comment }: UpdateCommentProps) => {
+const updateComment = async ({ playlistId, commentId, comment }: UpdateCommentParams) => {
   const playlistRef = ref(db, `playlists/${playlistId}/comments/${commentId}`);
   await update(playlistRef, comment);
   return playlistId;

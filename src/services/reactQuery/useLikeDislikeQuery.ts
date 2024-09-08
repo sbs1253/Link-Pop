@@ -3,14 +3,14 @@ import { db } from '@src/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserType } from '@store/types';
 import { useUserStore } from '@store/useUserStore';
-interface LikeDislikeData {
+interface LikeDislikeDataParams {
   userId: string;
   playlistId: string;
   action: 'like' | 'dislike';
   currentState: boolean;
 }
 
-const updateLikeDislike = async ({ userId, playlistId, action, currentState }: LikeDislikeData) => {
+const updateLikeDislike = async ({ userId, playlistId, action, currentState }: LikeDislikeDataParams) => {
   const userRef = ref(db, `users/${userId}`);
 
   const updates: { [key: string]: unknown } = {};

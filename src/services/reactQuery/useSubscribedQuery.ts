@@ -4,13 +4,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@store/useUserStore';
 import { fetchUserDataFirebase } from '@services/api/userService';
 
-interface SubscribeData {
+interface SubscribeDataParams {
   userId: string;
   playlistId: string;
   subscribed: boolean;
 }
 
-const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeData) => {
+const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeDataParams) => {
   const userRef = ref(db, `users/${userId}/subscribedPlaylists`);
   await update(userRef, { [playlistId]: !subscribed });
   const updatedUserData = await fetchUserDataFirebase(userId);

@@ -4,12 +4,12 @@ import { ref, remove } from 'firebase/database';
 import { useUserStore } from '@store/useUserStore';
 import { fetchUserDataFirebase } from '@services/api/userService';
 
-interface DeleteTrackListProps {
+interface DeleteTrackListParams {
   playlistId: string;
   trackId: string;
 }
 
-const deleteTrackList = async ({ playlistId, trackId }: DeleteTrackListProps) => {
+const deleteTrackList = async ({ playlistId, trackId }: DeleteTrackListParams) => {
   const trackListRef = ref(db, `playlists/${playlistId}/tracks/${trackId}`);
   await remove(trackListRef);
 };
