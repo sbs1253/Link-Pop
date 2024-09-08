@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ref, get, query, orderByChild } from 'firebase/database';
-import { db } from '@services/firebase';
+import { db } from '@src/firebase';
 import { PlaylistType, UserType } from '@store/types';
 
 const fetchAllPlaylists = async () => {

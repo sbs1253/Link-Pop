@@ -1,5 +1,5 @@
 import { get, increment, ref, update } from 'firebase/database';
-import { db } from '@services/firebase';
+import { db } from '@src/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserType } from '@store/types';
 import { useUserStore } from '@store/useUserStore';

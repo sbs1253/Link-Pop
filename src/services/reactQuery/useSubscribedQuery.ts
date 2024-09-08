@@ -1,5 +1,5 @@
 import { ref, update } from 'firebase/database';
-import { db } from '@services/firebase';
+import { db } from '@src/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@store/useUserStore';
 import { fetchUserDataFirebase } from '@services/api/userService';

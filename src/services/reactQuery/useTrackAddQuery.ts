@@ -1,5 +1,5 @@
 import { ref, push } from 'firebase/database';
-import { db } from '@services/firebase';
+import { db } from '@src/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface AddTrackParams {

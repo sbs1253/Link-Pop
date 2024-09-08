@@ -1,5 +1,5 @@
 import { ref, get } from 'firebase/database';
-import { db } from '@services/firebase';
+import { db } from '@src/firebase';
 
 // 유저 정보를 가져오는 함수
 export const fetchUserDataFirebase = async (userId: string) => {
