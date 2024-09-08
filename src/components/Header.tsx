@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { NotificationsNoneOutlined, Search, LogoutOutlined } from '@mui/icons-material';
 import { useUserStore } from '@store/useUserStore';
-import { usePlaylistStore } from '@store/usePlaylistStore';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -22,7 +21,6 @@ const Header = () => {
     {
       onClick: () => {
         useUserStore.persist.clearStorage();
-        usePlaylistStore.persist.clearStorage();
         navigate('/login');
       },
       icon: <LogoutOutlined></LogoutOutlined>,

@@ -7,6 +7,7 @@ interface LoginData {
   password: string;
 }
 
+// 로그인 쿼리
 export const useLoginQuery = () => {
   const queryClient = useQueryClient();
   const setUser = useUserStore((state) => state.setUser);

@@ -14,13 +14,13 @@ import { useformatTimestamp } from '@hooks/useformatTimestamp';
 import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
 import { useToggle } from '@hooks/useToggle';
 import LoadingCircular from '@components/LoadingCircular';
-import { MouseEvent } from 'react';
+import PlaylistForm from '@components/PlaylistForm';
 
 const PlayList = ({ playlistId }: { playlistId: string }) => {
   const navigate = useNavigate();
   const [toggle, setToggle] = useToggle();
+  const [openModal, setOpenModal] = useToggle();
   const user = useUserStore((state) => state.user);
-
   const { subscribePlaylist, subscribeError } = usePlaylistSubscriptionActions(playlistId, user);
   const { handleLike, handleDislike } = useLikeDislikeActions(playlistId, user);
   const { data: playlist, isLoading: playlistIsLoding, error: playlistError } = usePlaylistDetailsQuery(playlistId);
@@ -28,14 +28,22 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
 
   if (playlistIsLoding || isPending) return <LoadingCircular />;
   if (playlistError || subscribeError) return <div>Error loading playlist</div>;
-  if (!playlist) return null;
 
-  const handleDelete = (e: MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  if (!playlist) return null;
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenModal();
+    setToggle();
+  };
+  const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     mutate(playlistId);
+    setToggle();
   };
   const handleClick = () => {
-    navigate(`/playlist/${playlistId}`);
+    if (!openModal) {
+      navigate(`/playlist/${playlistId}`);
+    }
   };
 
   const navList = [
@@ -46,7 +54,6 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
           sx={user.subscribedPlaylists?.[playlist.id] ? { color: '#D33F40' } : null}
         ></FavoriteBorderOutlined>
       ),
-      text: <span>{playlist.likes}</span>,
     },
     {
       onClick: handleLike,
@@ -86,20 +93,22 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
           ))}
         </ul>
         <p className="playlist__creator">작성자 : {playlist.creator.username}</p>
-        <div className="playlist__more">
-          <PlayListMoreBtn
-            onClick={(e) => {
-              e.stopPropagation();
-              setToggle();
-            }}
-            className="playlist__more-button"
-          ></PlayListMoreBtn>
-          <div className={`playlist__action ${toggle && 'active'}`}>
-            <span>수정</span>
-            <span onClick={(e) => handleDelete(e)}>삭제</span>
+        {user.createdPlaylists && Object.hasOwn(user.createdPlaylists, playlistId) ? (
+          <div className="playlist__more">
+            <PlayListMoreBtn
+              onClick={(e) => {
+                e.stopPropagation();
+                setToggle();
+              }}
+            ></PlayListMoreBtn>
+            <div className={`playlist__action ${toggle && 'active'}`}>
+              <span onClick={handleEditClick}>수정</span>
+              <span onClick={handleDelete}>삭제</span>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
+      {openModal && <PlaylistForm setOpen={() => setOpenModal()} isEdit={true} playlist={playlist}></PlaylistForm>}
     </PlayListContainer>
   );
 };

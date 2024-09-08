@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-const NotFound = () => {
+const NotFound = ({ messege }: { messege: string }) => {
+  console.log(messege);
   return (
     <NotFoundContainer>
       <div className="main_wrapper">
@@ -33,7 +34,7 @@ const NotFound = () => {
               <div className="screen_out">
                 <div className="screen_out1">
                   <div className="screen">
-                    <span className="notfound_text"> NOT FOUND</span>
+                    <span className="notfound_text">{messege ? messege : 'NOT FOUND'}</span>
                   </div>
                 </div>
               </div>
@@ -78,9 +79,6 @@ const NotFound = () => {
 export default NotFound;
 
 const NotFoundContainer = styled.div`
-  /* From Uiverse.io by Praashoo7 */
-  /* Design Inspired by one of Stefan Devai's Design on Dribble */
-
   .main_wrapper {
     display: flex;
     align-items: center;
@@ -105,7 +103,6 @@ const NotFoundContainer = styled.div`
     background-color: #f27405;
     margin-bottom: -6em;
     margin-left: 0em;
-    z-index: -1;
   }
   .antenna_shadow {
     position: absolute;
@@ -116,8 +113,6 @@ const NotFoundContainer = styled.div`
     border-radius: 45%;
     transform: rotate(140deg);
     border: 4px solid transparent;
-    box-shadow: inset 0px 16px #a85103, inset 0px 16px 1px 1px #a85103;
-    -moz-box-shadow: inset 0px 16px #a85103, inset 0px 16px 1px 1px #a85103;
   }
   .antenna::after {
     content: '';
@@ -275,45 +270,6 @@ const NotFoundContainer = styled.div`
     }
   }
 
-  /* Another Error Screen to Use 
-
-.screen {
-  width: 13em;
-  height: 7.85em;
-  position: relative;
-  background: linear-gradient(to right, #002fc6 0%, #002bb2 14.2857142857%, #3a3a3a 14.2857142857%, #303030 28.5714285714%, #ff0afe 28.5714285714%, #f500f4 42.8571428571%, #6c6c6c 42.8571428571%, #626262 57.1428571429%, #0affd9 57.1428571429%, #00f5ce 71.4285714286%, #3a3a3a 71.4285714286%, #303030 85.7142857143%, white 85.7142857143%, #fafafa 100%);
-  border-radius: 10px;
-  border: 2px solid black;
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #252525;
-  letter-spacing: 0.15em;
-  text-align: center;
-  overflow: hidden;
-}
-.screen:before, .screen:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  z-index: 1;
-  width: 100%;
-}
-.screen:before {
-  top: 0;
-  height: 68.4782608696%;
-  background: linear-gradient(to right, white 0%, #fafafa 14.2857142857%, #ffe60a 14.2857142857%, #f5dc00 28.5714285714%, #0affd9 28.5714285714%, #00f5ce 42.8571428571%, #10ea00 42.8571428571%, #0ed600 57.1428571429%, #ff0afe 57.1428571429%, #f500f4 71.4285714286%, #ed0014 71.4285714286%, #d90012 85.7142857143%, #002fc6 85.7142857143%, #002bb2 100%);
-}
-.screen:after {
-  bottom: 0;
-  height: 21.7391304348%;
-  background: linear-gradient(to right, #006c6b 0%, #005857 16.6666666667%, white 16.6666666667%, #fafafa 33.3333333333%, #001b75 33.3333333333%, #001761 50%, #6c6c6c 50%, #626262 66.6666666667%, #929292 66.6666666667%, #888888 83.3333333333%, #3a3a3a 83.3333333333%, #303030 100%);
-}
-
-  */
-
   .lines {
     display: flex;
     column-gap: 0.1em;
@@ -458,7 +414,6 @@ const NotFoundContainer = styled.div`
     border: 2px solid #171717;
     background-color: #4d4d4d;
     margin-top: -0.15em;
-    z-index: -1;
   }
   .base2 {
     height: 1em;
@@ -466,7 +421,6 @@ const NotFoundContainer = styled.div`
     border: 2px solid #171717;
     background-color: #4d4d4d;
     margin-top: -0.15em;
-    z-index: -1;
   }
   .base3 {
     position: absolute;
@@ -486,7 +440,6 @@ const NotFoundContainer = styled.div`
     align-items: center;
     justify-content: center;
     opacity: 0.5;
-    font-family: Montserrat;
   }
   .text_4041 {
     transform: scaleY(24.5) scaleX(9);

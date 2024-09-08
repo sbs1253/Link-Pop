@@ -1,24 +1,24 @@
 import { ref, push } from 'firebase/database';
 import { db } from '@services/firebase';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CommentType } from 'src/store/types';
 
-interface AddTrackParams {
+interface AddCommentParams {
   playlistId: string;
-  track: { title: string; url: string };
+  comment: CommentType;
 }
-
-const addTrack = async ({ playlistId, track }: AddTrackParams) => {
-  const playlistRef = ref(db, `playlists/${playlistId}/tracks`);
-  await push(playlistRef, track);
+const addComment = async ({ playlistId, comment }: AddCommentParams) => {
+  const playlistRef = ref(db, `playlists/${playlistId}/comments`);
+  await push(playlistRef, comment);
   return playlistId;
 };
 
-// 트랙 추가 쿼리
-export const useTrackAddQuery = () => {
+// 댓글 추가 쿼리
+export const useCommentAddQuery = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: AddTrackParams) => addTrack(params),
+    mutationFn: (params: AddCommentParams) => addComment(params),
     onSuccess: (playlistId) => {
       queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
     },

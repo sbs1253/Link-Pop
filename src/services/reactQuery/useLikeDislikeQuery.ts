@@ -22,18 +22,16 @@ const updateLikeDislike = async ({ userId, playlistId, action, currentState }: L
     updates[`playlists/${playlistId}/${action}s`] = increment(currentState ? -1 : 1);
   }
   await update(ref(db), updates);
-
-  console.log((await get(userRef)).val());
-  const [userSnapshot] = await Promise.all([get(userRef)]);
+  const userSnapshot = await get(userRef);
   return {
     user: userSnapshot.val() as UserType,
   };
 };
 
+// 좋아요 싫어요 업데이트
 export const useLikeDislikeQuery = () => {
   const queryClient = useQueryClient();
   const setUser = useUserStore((state) => state.setUser);
-  // console.log(user);
   return useMutation({
     mutationFn: updateLikeDislike,
     onSuccess: ({ user }, { userId, playlistId }) => {

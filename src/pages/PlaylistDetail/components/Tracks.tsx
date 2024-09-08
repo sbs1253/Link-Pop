@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useDeleteTrackQuery } from '@services/reactQuery/useDeleteQuery';
-import { TrackType } from '@store/types';
 import DeleteButton from '@pages/PlaylistDetail/components/DeleteButton';
 import LoadingCircular from '@components/LoadingCircular';
 const Tracks = ({
@@ -11,7 +10,13 @@ const Tracks = ({
   title,
   url,
   index,
-}: TrackType & { trackId: string; playlistId: string; index: number }) => {
+}: {
+  title?: string;
+  url?: string;
+  trackId: string;
+  playlistId: string;
+  index: number;
+}) => {
   const [more, setMore] = useState(false);
   const titleRef = useRef(null);
   const [moreButton, setMoreButton] = useState(false);
@@ -32,9 +37,9 @@ const Tracks = ({
     const handleResize = () => {
       checkOverflow();
     };
-    window.addEventListener('resize', handleResize); // resize 이벤트 리스너 추가
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize); // 컴포넌트 언마운트 시 리스너 제거
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

@@ -10,7 +10,6 @@ interface SubscribeData {
   subscribed: boolean;
 }
 
-// 구독 상태 업데이트
 const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeData) => {
   const userRef = ref(db, `users/${userId}/subscribedPlaylists`);
   await update(userRef, { [playlistId]: !subscribed });
@@ -18,6 +17,7 @@ const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeD
   return updatedUserData;
 };
 
+// 구독 상태 업데이트
 export const useSubscribedQuery = () => {
   const queryClient = useQueryClient();
   const { setUser } = useUserStore();

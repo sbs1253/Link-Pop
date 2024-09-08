@@ -1,25 +1,52 @@
 import { usePlaylistAddQuery } from '@services/reactQuery/usePlaylistAddQuery';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DEFAULT_PLAYLIST } from '../constants/playlist';
 import { useUserStore } from '@store/useUserStore';
-const PlaylistAddForm = ({ setOpen }: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+import { usePlaylistUpdateQuery } from '@services/reactQuery/usePlaylistUpdateQuery';
+import { PlaylistType } from '@store/types';
+interface PlaylistFormProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  playlist?: PlaylistType;
+  isEdit?: boolean;
+}
+
+const PlaylistForm = ({ setOpen, playlist, isEdit = false }: PlaylistFormProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const { mutate } = usePlaylistAddQuery();
+  const { mutate: addMutate } = usePlaylistAddQuery();
+  const { mutate: updateMutate } = usePlaylistUpdateQuery();
   const user = useUserStore((state) => state.user);
+
+  useEffect(() => {
+    if (isEdit && playlist) {
+      setTitle(playlist.title);
+      setDescription(playlist.description);
+    }
+  }, [isEdit, playlist]);
+
   const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (title) {
-      const newPlaylist = {
-        ...DEFAULT_PLAYLIST,
-        title,
-        description,
-        createdAt: Date.now(),
-        creatorId: user.id,
-      };
-      mutate(newPlaylist);
+      if (isEdit && playlist) {
+        const updatedPlaylist = {
+          ...playlist,
+          title,
+          description,
+        };
+        updateMutate(updatedPlaylist);
+      } else {
+        const newPlaylist = {
+          ...DEFAULT_PLAYLIST,
+          title,
+          description,
+          createdAt: Date.now(),
+          creatorId: user.id,
+          tracks: {},
+        };
+        addMutate(newPlaylist);
+      }
       setTitle('');
       setDescription('');
       setOpen(false);
@@ -30,7 +57,7 @@ const PlaylistAddForm = ({ setOpen }: { setOpen: React.Dispatch<React.SetStateAc
   return (
     <PlaylistAddFormContainer onClick={() => setOpen(false)}>
       <div className="form__modal" onClick={(e) => e.stopPropagation()}>
-        <h3 className="form__title">재생목록 생성하기</h3>
+        <h3 className="form__title">{isEdit ? '재생목록 수정하기' : '재생목록 생성하기'}</h3>
         <form className="form__box" onSubmit={addPlaylist}>
           <div className="form__text">
             <label htmlFor="title">Title</label>
@@ -52,14 +79,14 @@ const PlaylistAddForm = ({ setOpen }: { setOpen: React.Dispatch<React.SetStateAc
               placeholder="Enter Description"
             />
           </div>
-          <button type="submit">생성</button>
+          <button type="submit">{isEdit ? '수정' : '생성'}</button>
         </form>
       </div>
     </PlaylistAddFormContainer>
   );
 };
 
-export default PlaylistAddForm;
+export default PlaylistForm;
 const PlaylistAddFormContainer = styled.div`
   position: fixed;
   top: 0%;

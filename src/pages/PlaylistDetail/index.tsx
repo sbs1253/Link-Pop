@@ -9,19 +9,20 @@ import { ControlPoint } from '@mui/icons-material';
 import { useToggle } from '@hooks/useToggle';
 import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
 import LoadingCircular from '@components/LoadingCircular';
+import CommentForm from '@pages/PlaylistDetail/components/CommentForm';
+import { CommentType } from '@store/types';
+import NotFound from '@pages/NotFound';
 
 const PlaylistDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: playlist, isLoading, isFetching } = usePlaylistDetailsQuery(id as string);
+  const { data: playlist, isFetching, isError, error } = usePlaylistDetailsQuery(id as string);
   const [open, setOpen] = useToggle();
+  if (isError) return <NotFound messege={error.message} />;
+  if (!playlist) return <NotFound messege="Playlist not found" />;
 
-  if (!id) {
-    return <h1 color="red">Error: No playlist ID provided</h1>;
-  }
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
-  if (!playlist) return <h1 color="red">Error: No playlist ID provided</h1>;
+  const sortCommentsDate = (comments: CommentType[]) => {
+    return Object.entries(comments).sort(([, a], [, b]) => b.createdAt - a.createdAt);
+  };
   return (
     <PlaylistDetailContainer>
       {isFetching && <LoadingCircular />}
@@ -52,13 +53,16 @@ const PlaylistDetail = () => {
       </PlaylistDetailList>
       <PlaylistDetailComment>
         <h3>Comment</h3>
+        <CommentForm playlistId={playlist.id} />
         {playlist.comments
-          ? playlist.comments?.map((playlist, index) => (
+          ? sortCommentsDate(playlist.comments)?.map(([id, comments]) => (
               <Comment
-                key={index}
-                userId={playlist.userId}
-                comment={playlist.comment}
-                createdAt={playlist.createdAt}
+                key={id}
+                commentId={id}
+                userId={comments.userId}
+                comment={comments.comment}
+                createdAt={comments.createdAt}
+                playlistId={playlist.id}
               ></Comment>
             ))
           : null}

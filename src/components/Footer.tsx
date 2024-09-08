@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { SpaceDashboardOutlined, ControlPoint } from '@mui/icons-material';
-import PlaylistAddForm from '@components/PlaylistAddForm';
+import PlaylistForm from '@components/PlaylistForm';
 import { useToggle } from '@hooks/useToggle';
 
 const Footer = () => {
@@ -34,7 +34,7 @@ const Footer = () => {
   console.log(open);
   return (
     <FooterContainer>
-      {open && <PlaylistAddForm setOpen={() => setOpen()} />}
+      {open && <PlaylistForm setOpen={() => setOpen()} />}
       <ul>
         {buttons.map((button, index) => (
           <li key={index} onClick={button.onClick}>

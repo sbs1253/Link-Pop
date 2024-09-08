@@ -4,8 +4,12 @@ import { ref, remove } from 'firebase/database';
 import { useUserStore } from '@store/useUserStore';
 import { fetchUserDataFirebase } from '@services/api/userService';
 
-const deleteTrackList = async (playlistId: string, trackId: string) => {
-  console.log(playlistId);
+interface DeleteTrackListProps {
+  playlistId: string;
+  trackId: string;
+}
+
+const deleteTrackList = async ({ playlistId, trackId }: DeleteTrackListProps) => {
   const trackListRef = ref(db, `playlists/${playlistId}/tracks/${trackId}`);
   await remove(trackListRef);
 };
@@ -13,8 +17,7 @@ const deleteTrackList = async (playlistId: string, trackId: string) => {
 export const useDeleteTrackQuery = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ playlistId, trackId }: { playlistId: string; trackId: string }) =>
-      deleteTrackList(playlistId, trackId),
+    mutationFn: deleteTrackList,
     onSuccess: (_, { playlistId }) => {
       queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
     },
@@ -36,6 +39,7 @@ const deletePlaylist = async (playlistId: string, userId: string) => {
   return updatedUserData;
 };
 
+// 플레이리스트 삭제 쿼리
 export const useDeletePlaylistQuery = () => {
   const queryClient = useQueryClient();
   const userId = useUserStore((state) => state.user.id);

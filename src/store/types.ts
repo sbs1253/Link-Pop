@@ -12,9 +12,8 @@ export interface PlaylistsType {
   [key: string]: boolean;
 }
 export interface TrackType {
-  [key: string]: string;
-  title: string;
-  url: string;
+  title?: string;
+  url?: string;
 }
 
 export interface CommentType {

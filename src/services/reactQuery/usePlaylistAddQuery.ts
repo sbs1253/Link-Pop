@@ -18,6 +18,7 @@ const addPlaylist = async (newPlaylist: DefaultPlaylistType, userId: string) => 
   return { playlistId, updatedUserData };
 };
 
+// 플레이리스트 생성
 export const usePlaylistAddQuery = () => {
   const queryClient = useQueryClient();
   const userId = useUserStore((state) => state.user.id);
@@ -26,6 +27,7 @@ export const usePlaylistAddQuery = () => {
     mutationFn: (newPlaylist: DefaultPlaylistType) => addPlaylist(newPlaylist, userId),
     onSuccess: ({ playlistId, updatedUserData }) => {
       setUser(updatedUserData);
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
       queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
       queryClient.setQueryData(['user', userId], updatedUserData);
     },
