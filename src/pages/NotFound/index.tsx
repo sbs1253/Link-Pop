@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-const NotFound = ({ messege }: { messege: string }) => {
-  console.log(messege);
+const NotFound = ({ messege }: { messege?: string }) => {
   return (
     <NotFoundContainer>
       <div className="main_wrapper">
