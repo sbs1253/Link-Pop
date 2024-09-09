@@ -1,4 +1,4 @@
-# 급여관리 시스템
+# SNS 공유 플랫폼
 
 <!--배지-->
 ![Repository Size][repository-size-shield] ![Issue open][issue-open-shield] ![Issue Closed][issue-closed-shield] ![Issue PR][issue-PR-shield] ![Issue PRClosed][issue-PRclosed-shield]
