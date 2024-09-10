@@ -45,7 +45,7 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
       navigate(`/playlist/${playlistId}`);
     }
   };
-
+  console.log();
   const navList = [
     {
       onClick: subscribePlaylist,
@@ -71,7 +71,7 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
     },
     {
       icon: <CommentOutlined></CommentOutlined>,
-      text: <span>{playlist.comments?.length || 0}</span>,
+      text: <span>{(playlist.comments && Object.keys(playlist.comments).length) || 0}</span>,
     },
   ];
 
