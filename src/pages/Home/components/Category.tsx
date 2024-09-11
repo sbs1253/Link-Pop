@@ -1,24 +1,34 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+const Category = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const handleClick = (category: string) => setSearchParams({ category });
+  const category = [
+    {
+      onclick: () => handleClick('all'),
+      className: searchParams.get('category') === 'all' ? 'active' : '',
+      text: 'All',
+    },
+    {
+      onclick: () => handleClick('subscribe'),
+      className: searchParams.get('category') === 'subscribe' ? 'active' : '',
+      text: 'Subscribe',
+    },
+    {
+      onclick: () => handleClick('myPlaylist'),
+      className: searchParams.get('category') === 'myPlaylist' ? 'active' : '',
+      text: 'MyPlaylist',
+    },
+  ];
 
-const Category = ({ handleCategory }: { handleCategory: (category: string) => void }) => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const handleClick = (category: string) => {
-    setSelectedCategory(category);
-    handleCategory(category);
-  };
   return (
     <CategoryContainer>
       <ul>
-        <li onClick={() => handleClick('All')} className={selectedCategory === 'All' ? 'active' : ''}>
-          All
-        </li>
-        <li onClick={() => handleClick('Subscribe')} className={selectedCategory === 'Subscribe' ? 'active' : ''}>
-          Subscribe
-        </li>
-        <li onClick={() => handleClick('MyPlaylist')} className={selectedCategory === 'MyPlaylist' ? 'active' : ''}>
-          MyPlaylist
-        </li>
+        {category.map((item, index) => (
+          <li key={index} onClick={item.onclick} className={item.className}>
+            {item.text}
+          </li>
+        ))}
       </ul>
     </CategoryContainer>
   );
@@ -26,7 +36,7 @@ const Category = ({ handleCategory }: { handleCategory: (category: string) => vo
 
 export default Category;
 
-const CategoryContainer = styled.div`
+const CategoryContainer = styled.nav`
   width: 100%;
   min-height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.background[3]};

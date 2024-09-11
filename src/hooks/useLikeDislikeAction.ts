@@ -1,26 +1,5 @@
-import { useSubscribedQuery } from '@services/reactQuery/useSubscribedQuery';
 import { useLikeDislikeQuery } from '@services/reactQuery/useLikeDislikeQuery';
-import { UserType, PlaylistsType } from '@store/types';
-
-export const usePlaylistSubscriptionActions = (playlistId: string, user: UserType) => {
-  const {
-    mutate: subscribeMutate,
-    isPending: subscribeIsPending,
-    isError: subscribeIsError,
-    error: subscribeError,
-  } = useSubscribedQuery();
-
-  const subscribePlaylist = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    subscribeMutate({
-      userId: user.id,
-      playlistId: playlistId,
-      subscribed: user.subscribedPlaylists?.[playlistId] || false,
-    });
-  };
-
-  return { subscribePlaylist, subscribeIsPending, subscribeIsError, subscribeError };
-};
+import { PlaylistsType, UserType } from '@store/types';
 
 export const useLikeDislikeActions = (playlistId: string, user: UserType) => {
   const { mutate, isPending, isError, error } = useLikeDislikeQuery();

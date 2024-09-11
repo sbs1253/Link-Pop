@@ -11,14 +11,14 @@ const PlaylistTrackForm = ({
 }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
-  const { mutate } = useTrackAddQuery();
+  const { mutate: trackAddMutate } = useTrackAddQuery();
   const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const track = {
       title,
       url,
     };
-    mutate({ playlistId, track });
+    trackAddMutate({ playlistId, track });
     setTitle('');
     setUrl('');
     setOpen(false);

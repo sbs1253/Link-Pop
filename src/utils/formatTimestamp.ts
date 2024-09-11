@@ -1,4 +1,4 @@
-export const useformatTimestamp = (timestamp: number): string => {
+export const formatTimestamp = (timestamp: number): string => {
   const date = new Date(timestamp);
   return date.toLocaleString();
 };

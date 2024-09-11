@@ -1,5 +1,4 @@
 import { usePlaylistAddQuery } from '@services/reactQuery/usePlaylistAddQuery';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DEFAULT_PLAYLIST } from '../constants/playlist';
 import { useUserStore } from '@store/useUserStore';
@@ -10,72 +9,64 @@ interface PlaylistFormProps {
   playlist?: PlaylistType;
   isEdit?: boolean;
 }
-
+interface InputValuesType {
+  [k: string]: FormDataEntryValue;
+}
 const PlaylistForm = ({ setOpen, playlist, isEdit = false }: PlaylistFormProps) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-
   const { mutate: addMutate } = usePlaylistAddQuery();
   const { mutate: updateMutate } = usePlaylistUpdateQuery();
   const user = useUserStore((state) => state.user);
 
-  useEffect(() => {
-    if (isEdit && playlist) {
-      setTitle(playlist.title);
-      setDescription(playlist.description);
-    }
-  }, [isEdit, playlist]);
+  const updatePlaylist = (inputValues: InputValuesType) => {
+    const updatedPlaylist = {
+      ...playlist,
+      ...inputValues,
+    };
+    updateMutate(updatedPlaylist as PlaylistType);
+  };
+  const newAddPlaylist = (inputValues: InputValuesType) => {
+    const newPlaylist = {
+      ...DEFAULT_PLAYLIST,
+      ...inputValues,
+      createdAt: Date.now(),
+      creatorId: user.id,
+      tracks: {},
+    };
+    addMutate(newPlaylist);
+  };
 
-  const addPlaylist = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (title) {
-      if (isEdit && playlist) {
-        const updatedPlaylist = {
-          ...playlist,
-          title,
-          description,
-        };
-        updateMutate(updatedPlaylist);
-      } else {
-        const newPlaylist = {
-          ...DEFAULT_PLAYLIST,
-          title,
-          description,
-          createdAt: Date.now(),
-          creatorId: user.id,
-          tracks: {},
-        };
-        addMutate(newPlaylist);
-      }
-      setTitle('');
-      setDescription('');
-      setOpen(false);
+  const handleFormSubmit = (inputValues: InputValuesType) => {
+    if (isEdit && playlist) {
+      updatePlaylist(inputValues);
     } else {
-      alert('제목을 입력해주세요.');
+      newAddPlaylist(inputValues);
     }
+    setOpen(false);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(e.currentTarget);
+    const inputValues: InputValuesType = Object.fromEntries(formData.entries());
+    e.preventDefault();
+    if (!inputValues.title || !inputValues.description) {
+      return alert('내용을 입력해주세요.');
+    }
+    handleFormSubmit(inputValues);
   };
   return (
     <PlaylistAddFormContainer onClick={() => setOpen(false)}>
       <div className="form__modal" onClick={(e) => e.stopPropagation()}>
         <h3 className="form__title">{isEdit ? '재생목록 수정하기' : '재생목록 생성하기'}</h3>
-        <form className="form__box" onSubmit={addPlaylist}>
+        <form className="form__box" onSubmit={handleSubmit}>
           <div className="form__text">
             <label htmlFor="title">Title</label>
-            <input
-              id="title"
-              name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter Title"
-            />
+            <input id="title" name="title" defaultValue={playlist?.title || ''} placeholder="Enter Title" />
           </div>
           <div className="form__text">
             <label htmlFor="description">Description</label>
             <input
               id="description"
               name="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              defaultValue={playlist?.description || ''}
               placeholder="Enter Description"
             />
           </div>

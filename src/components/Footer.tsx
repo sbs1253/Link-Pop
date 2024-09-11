@@ -1,19 +1,18 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { SpaceDashboardOutlined, ControlPoint } from '@mui/icons-material';
 import PlaylistForm from '@components/PlaylistForm';
 import { useToggle } from '@hooks/useToggle';
 
 const Footer = () => {
-  const navigate = useNavigate();
   const [open, setOpen] = useToggle();
-
   const buttons = [
     {
-      onClick: () => {
-        navigate('/');
-      },
-      icon: <SpaceDashboardOutlined></SpaceDashboardOutlined>,
+      icon: (
+        <Link to={'/'}>
+          <SpaceDashboardOutlined></SpaceDashboardOutlined>
+        </Link>
+      ),
       text: 'Home',
     },
     {
@@ -24,19 +23,20 @@ const Footer = () => {
       text: '',
     },
     {
-      onClick: () => {
-        navigate('/profile');
-      },
-      icon: <img src="/assets/profile.jpg" alt="profile" />,
+      icon: (
+        <Link to={'/profile'}>
+          <img src="/assets/profile.jpg" alt="profile" />
+        </Link>
+      ),
       text: 'Profile',
     },
   ];
   return (
     <FooterContainer>
-      {open && <PlaylistForm setOpen={() => setOpen()} />}
+      {open && <PlaylistForm setOpen={() => setOpen(false)} />}
       <ul>
         {buttons.map((button, index) => (
-          <li key={index} onClick={button.onClick}>
+          <li key={index} onClick={button.onClick ? button.onClick : undefined}>
             {button.icon}
             <span>{button.text}</span>
           </li>

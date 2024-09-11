@@ -31,7 +31,7 @@ const updateLikeDislike = async ({ userId, playlistId, action, currentState }: L
 // 좋아요 싫어요 업데이트
 export const useLikeDislikeQuery = () => {
   const queryClient = useQueryClient();
-  const setUser = useUserStore((state) => state.setUser);
+  const setUser = useUserStore((state) => state.action.setUser);
   return useMutation({
     mutationFn: updateLikeDislike,
     onSuccess: ({ user }, { userId, playlistId }) => {

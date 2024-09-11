@@ -1,4 +1,3 @@
-import { useformatTimestamp } from '@hooks/useformatTimestamp';
 import { useUserQuery } from '@services/reactQuery/useUserQuery';
 import { CommentType } from 'src/store/types';
 import { MoreVertOutlined } from '@mui/icons-material';
@@ -8,6 +7,7 @@ import { useUserStore } from '@store/useUserStore';
 import { useState } from 'react';
 import { useCommentUpdateQuery } from '@services/reactQuery/useCommentUpdateQuery';
 import { useCommentDeleteQuery } from '@services/reactQuery/useCommentDeleteQuery';
+import { formatTimestamp } from '@utils/formatTimestamp';
 
 const Comment = ({
   userId,
@@ -18,10 +18,10 @@ const Comment = ({
 }: CommentType & { playlistId: string; commentId: string }) => {
   const { data } = useUserQuery(userId);
   const [toggle, setToggle] = useToggle();
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useToggle();
   const [newComment, setNewComment] = useState(comment);
-  const { mutate } = useCommentUpdateQuery();
-  const { mutate: deleteMutate } = useCommentDeleteQuery();
+  const { mutate: commentUpdateMutate } = useCommentUpdateQuery();
+  const { mutate: commentDeleteMutate } = useCommentDeleteQuery();
   const user = useUserStore((state) => state.user);
   if (!data) return null;
   const handleEditClick = () => {
@@ -30,11 +30,11 @@ const Comment = ({
   };
   const handleSave = () => {
     const updateComment = { userId, comment: newComment, createdAt: Date.now() };
-    mutate({ playlistId, commentId, comment: updateComment });
+    commentUpdateMutate({ playlistId, commentId, comment: updateComment });
     setEditMode(false);
   };
   const handleDelete = () => {
-    deleteMutate({ playlistId, commentId });
+    commentDeleteMutate({ playlistId, commentId });
   };
   return (
     <CommentContainer>
@@ -42,7 +42,7 @@ const Comment = ({
       <div className="comment__info">
         <div className="comment__title">
           <span>{data.username}</span>
-          <span>{useformatTimestamp(createdAt)}</span>
+          <span>{formatTimestamp(createdAt)}</span>
         </div>
         {editMode ? (
           <div className="comment__text-edit">

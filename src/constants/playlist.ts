@@ -1,5 +1,5 @@
 import { CommentType } from 'src/store/types';
-import { TrackType } from './../store/types';
+import { TrackType } from '@store/types';
 
 export const DEFAULT_PLAYLIST: {
   comments: CommentType[];

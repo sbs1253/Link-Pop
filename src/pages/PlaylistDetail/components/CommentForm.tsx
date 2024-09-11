@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import SendIcon from '@mui/icons-material/Send';
-import { useUserStore } from './../../../store/useUserStore';
+import { useUserStore } from '@store/useUserStore';
 import { useCommentAddQuery } from '@services/reactQuery/useCommentAddQuery';
 
 const CommentComponent = ({ playlistId }: { playlistId: string }) => {
   const [comment, setComment] = useState('');
   const user = useUserStore((state) => state.user);
-  const { mutate } = useCommentAddQuery();
+  const { mutate: commentAddMutate } = useCommentAddQuery();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newComment = {
@@ -15,7 +15,7 @@ const CommentComponent = ({ playlistId }: { playlistId: string }) => {
       comment,
       createdAt: Date.now(),
     };
-    mutate({ playlistId, comment: newComment });
+    commentAddMutate({ playlistId, comment: newComment });
     setComment('');
   };
 

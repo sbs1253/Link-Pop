@@ -20,7 +20,7 @@ const PlaylistDetail = () => {
   if (isError) return <NotFound messege={error.message} />;
   if (!playlist) return <NotFound messege="Playlist not found" />;
 
-  const sortCommentsDate = (comments: CommentType[]) => {
+  const sortCommentsDate = (comments: CommentType) => {
     return Object.entries(comments).sort(([, a], [, b]) => b.createdAt - a.createdAt);
   };
   return (

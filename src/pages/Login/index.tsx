@@ -5,17 +5,31 @@ import { useNavigate } from 'react-router-dom';
 import LoadingCircular from '@components/LoadingCircular';
 import NotFound from '@pages/NotFound';
 import { useUserStore } from '@store/useUserStore';
+import { emailValidator, passwordValidator } from '@utils/validator';
 
-export const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { mutate, isPending, isError, error, isSuccess } = useLoginQuery();
-  const setIsLogin = useUserStore((state) => state.setIsLogin);
-
+export const Login = () => {
+  const [loginValue, setLoginValue] = useState({ email: '', password: '' });
+  const [errorMessege, setErrorMessege] = useState({ email: '', password: '' });
+  const { mutate: loginMutate, isPending, isError, error, isSuccess } = useLoginQuery();
+  const setIsLogin = useUserStore((state) => state.action.setIsLogin);
   const navigate = useNavigate();
+
+  const handleValidation = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === 'email') {
+      setErrorMessege({ ...errorMessege, email: emailValidator(value) });
+    }
+    if (name === 'password') {
+      setErrorMessege({ ...errorMessege, password: passwordValidator(value) });
+    }
+  };
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate({ email, password });
+    if (emailValidator(loginValue.email) !== 'success' || passwordValidator(loginValue.password) !== 'success') {
+      setErrorMessege({ email: emailValidator(loginValue.email), password: passwordValidator(loginValue.password) });
+    } else {
+      loginMutate(loginValue);
+    }
   };
   if (isPending) {
     return <LoadingCircular />;
@@ -29,20 +43,39 @@ export const Login: React.FC = () => {
   return (
     <LoginContainer>
       <img src="/assets/logo.png" alt="logo" />
-      <Title>Studio 로그인</Title>
-      <Form onSubmit={handleLogin}>
-        <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" required />
-        <Input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호"
-          required
-        />
-        <Button type="submit" disabled={isPending}>
+      <h2 className="login__title">Studio 로그인</h2>
+      <form onSubmit={handleLogin} className="login__form">
+        <div className="login__input">
+          <input
+            type="email"
+            value={loginValue.email}
+            name="email"
+            onChange={(e) => setLoginValue({ ...loginValue, email: e.target.value })}
+            onBlur={handleValidation}
+            placeholder="이메일"
+            required
+          />
+          {errorMessege.email !== 'success' && <ErrorMessege>{errorMessege.email}</ErrorMessege>}
+        </div>
+        <div className="login__input">
+          <input
+            type="password"
+            value={loginValue.password}
+            name="password"
+            onChange={(e) => setLoginValue({ ...loginValue, password: e.target.value })}
+            onBlur={handleValidation}
+            placeholder="비밀번호"
+            required
+          />
+          {errorMessege.password !== 'success' && <ErrorMessege>{errorMessege.password}</ErrorMessege>}
+        </div>
+        <Button
+          type="submit"
+          disabled={isPending || errorMessege.email !== 'success' || errorMessege.password !== 'success'}
+        >
           로그인
         </Button>
-      </Form>
+      </form>
     </LoginContainer>
   );
 };
@@ -65,27 +98,32 @@ const LoginContainer = styled.div`
     width: 70px;
     height: 70px;
   }
-`;
+  & .login__title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-const Title = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Input = styled.input`
-  background-color: ${(props) => props.theme.colors.background[2]};
-  border: none;
-  border-radius: 4px;
-  color: ${(props) => props.theme.colors.text.title};
-  padding: 10px;
-  margin-bottom: 10px;
-  &::placeholder {
-    color: ${(props) => props.theme.colors.text.bodySubtle};
+  & .login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    & .login__input {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      width: 100%;
+      & input {
+        background-color: ${(props) => props.theme.colors.background[2]};
+        border: none;
+        border-radius: 4px;
+        color: ${(props) => props.theme.colors.text.title};
+        padding: 10px;
+        margin-bottom: 10px;
+        &::placeholder {
+          color: ${(props) => props.theme.colors.text.bodySubtle};
+        }
+      }
+    }
   }
 `;
 
@@ -100,4 +138,14 @@ const Button = styled.button`
     background-color: ${(props) => props.theme.colors.success.disabled};
     cursor: not-allowed;
   }
+`;
+
+const ErrorMessege = styled.span`
+  position: absolute;
+  bottom: -20px;
+  color: ${(props) => props.theme.colors.danger.normal};
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body-small);
+  font-weight: var(--font-weight-body-small);
+  margin-bottom: 10px;
 `;

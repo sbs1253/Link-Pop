@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const NotFound = ({ messege }: { messege?: string }) => {
   return (
@@ -71,6 +72,9 @@ const NotFound = ({ messege }: { messege?: string }) => {
           <div className="text_4043">4</div>
         </div>
       </div>
+      <Link className="homebtn" to={'/'}>
+        홈으로 이동
+      </Link>
     </NotFoundContainer>
   );
 };
@@ -448,5 +452,11 @@ const NotFoundContainer = styled.div`
   }
   .text_4043 {
     transform: scaleY(24.5) scaleX(9);
+  }
+
+  .homebtn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
 `;

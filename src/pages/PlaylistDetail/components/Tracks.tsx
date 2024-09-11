@@ -20,9 +20,9 @@ const Tracks = ({
   const [more, setMore] = useState(false);
   const titleRef = useRef(null);
   const [moreButton, setMoreButton] = useState(false);
-  const { mutate, isPending } = useDeleteTrackQuery();
+  const { mutate: trackDeleteMutate, isPending } = useDeleteTrackQuery();
   const deleteTrack = () => {
-    mutate({ playlistId, trackId });
+    trackDeleteMutate({ playlistId, trackId });
   };
 
   const checkOverflow = () => {

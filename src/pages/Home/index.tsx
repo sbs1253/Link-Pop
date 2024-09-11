@@ -1,22 +1,21 @@
 import Category from '@pages/Home/components/Category';
 import PlayList from '@components/PlayList';
 import styled from 'styled-components';
-import { useState } from 'react';
-import useCategory from '@hooks/useCategory';
 import LoadingCircular from '@components/LoadingCircular';
 import NotFound from '@pages/NotFound';
+import { useAllPlaylistsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import { useSearchParams } from 'react-router-dom';
 const Home = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const { data, isLoading, isError, error } = useCategory(selectedCategory);
+  const [query] = useSearchParams();
+  const category = query.get('category');
+  const { data, isLoading, isError, error } = useAllPlaylistsQuery(category || 'all');
+
   if (isLoading) return <LoadingCircular />;
   if (isError) return <NotFound messege={error?.message || 'Not Found'} />;
 
-  const handleCategory = (category: string) => {
-    setSelectedCategory(category);
-  };
   return (
     <HomeContainer>
-      <Category handleCategory={handleCategory} />
+      <Category />
       {data?.map((playlistId) => (
         <PlayList key={playlistId} playlistId={playlistId} />
       ))}

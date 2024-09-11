@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ref, get, query, orderByChild } from 'firebase/database';
 import { db } from '@src/firebase';
 import { PlaylistType, UserType } from '@store/types';
+import { useUserStore } from '@store/useUserStore';
 
 const fetchAllPlaylists = async () => {
   const playlistsRef = ref(db, 'playlists');
@@ -37,10 +38,23 @@ const fetchPlaylistDetails = async (playlistId: string) => {
 };
 
 // 전체 플레이리스트 목록을 가져오는 쿼리
-export const useAllPlaylistsQuery = () => {
+export const useAllPlaylistsQuery = (category: string) => {
+  const user = useUserStore((state) => state.user);
   return useQuery({
     queryKey: ['playlists'],
     queryFn: fetchAllPlaylists,
+    select: (data) => {
+      switch (category) {
+        case 'all':
+          return data;
+        case 'subscribe':
+          return data.filter((playlistId) => user.subscribedPlaylists?.[playlistId] || '');
+        case 'myPlaylist':
+          return data.filter((playlistId) => user.createdPlaylists?.[playlistId] || '');
+        default:
+          return data;
+      }
+    },
   });
 };
 

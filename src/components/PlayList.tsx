@@ -10,21 +10,22 @@ import { useNavigate } from 'react-router-dom';
 import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
 import { useDeletePlaylistQuery } from '@services/reactQuery/useDeleteQuery';
 import { useUserStore } from '@store/useUserStore';
-import { useformatTimestamp } from '@hooks/useformatTimestamp';
-import { useLikeDislikeActions, usePlaylistSubscriptionActions } from '@hooks/usePlaylistAction';
 import { useToggle } from '@hooks/useToggle';
 import LoadingCircular from '@components/LoadingCircular';
 import PlaylistForm from '@components/PlaylistForm';
+import { useSubscriptionAction } from '@hooks/useSubscriptionAction';
+import { useLikeDislikeActions } from '@hooks/useLikeDislikeAction';
+import { formatTimestamp } from '@utils/formatTimestamp';
 
 const PlayList = ({ playlistId }: { playlistId: string }) => {
   const navigate = useNavigate();
   const [toggle, setToggle] = useToggle();
   const [openModal, setOpenModal] = useToggle();
   const user = useUserStore((state) => state.user);
-  const { subscribePlaylist, subscribeError } = usePlaylistSubscriptionActions(playlistId, user);
+  const { subscribePlaylist, subscribeError } = useSubscriptionAction(playlistId, user);
   const { handleLike, handleDislike } = useLikeDislikeActions(playlistId, user);
   const { data: playlist, isLoading: playlistIsLoding, error: playlistError } = usePlaylistDetailsQuery(playlistId);
-  const { mutate, isPending } = useDeletePlaylistQuery();
+  const { mutate: deletePlaylistMutate, isPending } = useDeletePlaylistQuery();
 
   if (playlistIsLoding || isPending) return <LoadingCircular />;
   if (playlistError || subscribeError) return <div>Error loading playlist</div>;
@@ -37,7 +38,7 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
   };
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    mutate(playlistId);
+    deletePlaylistMutate(playlistId);
     setToggle();
   };
   const handleClick = () => {
@@ -45,7 +46,6 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
       navigate(`/playlist/${playlistId}`);
     }
   };
-  console.log();
   const navList = [
     {
       onClick: subscribePlaylist,
@@ -82,7 +82,7 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
         <div>
           <h4>{playlist.title}</h4>
           <p>{playlist.description}</p>
-          <p>{useformatTimestamp(playlist.createdAt)}</p>
+          <p>{formatTimestamp(playlist.createdAt)}</p>
         </div>
         <ul>
           {navList.map((nav, index) => (
