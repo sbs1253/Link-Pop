@@ -51,7 +51,8 @@ export default Footer;
 const FooterContainer = styled.nav`
   position: fixed;
   bottom: 0;
-  width: 500px;
+  max-width: 500px;
+  width: 100%;
   height: 80px;
   border-top: 1px solid ${(props) => props.theme.colors.background[3]};
   padding: 10px 20px;
