@@ -131,6 +131,7 @@ const PlayListContainer = styled.div`
     width: 70px;
     height: 70px;
     border-radius: 50%;
+    object-fit: cover;
   }
   & .playlist__info {
     display: flex;

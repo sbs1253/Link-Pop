@@ -49,9 +49,9 @@ const Footer = () => {
 export default Footer;
 
 const FooterContainer = styled.nav`
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 500px;
   height: 80px;
   border-top: 1px solid ${(props) => props.theme.colors.background[3]};
   padding: 10px 20px;

@@ -84,9 +84,9 @@ const PlaylistDetailContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  height: 100%;
-  padding-bottom: 200px;
-  overflow-y: scroll;
+  height: calc(100% - 151px);
+  padding: 10px 0;
+  overflow-y: auto;
   & .detail__track {
     display: flex;
     justify-content: space-between;
@@ -114,4 +114,5 @@ const PlaylistDetailComment = styled.div`
   flex-direction: column;
   gap: 10px;
   padding: 0 10px;
+  /* overflow-y: auto; */
 `;

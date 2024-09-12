@@ -84,9 +84,10 @@ const CommentContainer = styled.div`
   border: 1px solid ${(props) => props.theme.colors.background[3]};
 
   & img {
-    width: 70px;
-    height: 70px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
+    object-fit: cover;
   }
   & .comment__info {
     display: flex;

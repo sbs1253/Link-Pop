@@ -56,6 +56,7 @@ const CommentContainer = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    object-fit: cover;
   }
   & .comment__input {
     flex-grow: 1;

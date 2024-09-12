@@ -7,7 +7,7 @@ interface Store {
   isLogin: boolean;
 }
 interface Action {
-  action: {
+  actions: {
     setUser: (user: UserType) => void;
     setIsLogin: (isLogin: boolean) => void;
     logout: () => void;
@@ -22,7 +22,7 @@ export const useUserStore = create<Store & Action>()(
     persist(
       (set) => ({
         ...initialState,
-        action: {
+        actions: {
           setUser: (newUser: UserType) => {
             set((state: Store) => ({
               user: { ...state.user, ...newUser },

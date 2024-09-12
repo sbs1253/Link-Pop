@@ -44,7 +44,7 @@ const deletePlaylist = async (playlistId: string, userId: string) => {
 export const useDeletePlaylistQuery = () => {
   const queryClient = useQueryClient();
   const userId = useUserStore((state) => state.user.id);
-  const setUser = useUserStore((state) => state.action.setUser);
+  const setUser = useUserStore((state) => state.actions.setUser);
   return useMutation({
     mutationFn: (playlistId: string) => deletePlaylist(playlistId, userId),
     onSuccess: ({ updatedUserData }) => {

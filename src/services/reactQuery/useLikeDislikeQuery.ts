@@ -12,8 +12,12 @@ interface LikeDislikeDataParams {
 
 const updateLikeDislike = async ({ userId, playlistId, action, currentState }: LikeDislikeDataParams) => {
   const userRef = ref(db, `users/${userId}`);
-
-  const updates: { [key: string]: unknown } = {};
+  const playlistAction = `${action}s`;
+  const userAction = action === 'like' ? 'likedPlaylists' : 'dislikedPlaylists';
+  const updates: { [key: string]: unknown } = {
+    [`users/${userId}/${userAction}/${playlistId}`]: !currentState,
+    [`playlists/${playlistId}/${playlistAction}`]: increment(currentState ? -1 : 1),
+  };
   if (action === 'like') {
     updates[`users/${userId}/likedPlaylists/${playlistId}`] = !currentState;
     updates[`playlists/${playlistId}/${action}s`] = increment(currentState ? -1 : 1);
@@ -31,7 +35,7 @@ const updateLikeDislike = async ({ userId, playlistId, action, currentState }: L
 // 좋아요 싫어요 업데이트
 export const useLikeDislikeQuery = () => {
   const queryClient = useQueryClient();
-  const setUser = useUserStore((state) => state.action.setUser);
+  const setUser = useUserStore((state) => state.actions.setUser);
   return useMutation({
     mutationFn: updateLikeDislike,
     onSuccess: ({ user }, { userId, playlistId }) => {

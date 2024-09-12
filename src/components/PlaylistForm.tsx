@@ -43,6 +43,7 @@ const PlaylistForm = ({ setOpen, playlist, isEdit = false }: PlaylistFormProps) 
     }
     setOpen(false);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget);
     const inputValues: InputValuesType = Object.fromEntries(formData.entries());

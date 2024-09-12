@@ -30,7 +30,7 @@ const HomeContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  height: 100%;
-  padding-bottom: 200px;
-  overflow-y: scroll;
+  height: calc(100% - 151px);
+
+  overflow-y: auto;
 `;

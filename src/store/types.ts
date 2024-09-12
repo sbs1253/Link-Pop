@@ -29,7 +29,7 @@ export interface PlaylistType {
   creatorId: string;
   creator: PlaylistCreator;
   tracks: TrackType;
-  comments: CommentType[];
+  comments: CommentType;
   likes: number;
   dislikes: number;
   createdAt: number;

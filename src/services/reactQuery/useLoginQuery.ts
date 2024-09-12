@@ -10,7 +10,7 @@ interface LoginDataParams {
 // 로그인 쿼리
 export const useLoginQuery = () => {
   const queryClient = useQueryClient();
-  const setUser = useUserStore((state) => state.action.setUser);
+  const setUser = useUserStore((state) => state.actions.setUser);
 
   return useMutation({
     mutationFn: (credentials: LoginDataParams) => loginUser(credentials.email, credentials.password),

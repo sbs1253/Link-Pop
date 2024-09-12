@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useLoginQuery } from '@services/reactQuery/useLoginQuery';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +11,15 @@ export const Login = () => {
   const [loginValue, setLoginValue] = useState({ email: '', password: '' });
   const [errorMessege, setErrorMessege] = useState({ email: '', password: '' });
   const { mutate: loginMutate, isPending, isError, error, isSuccess } = useLoginQuery();
-  const setIsLogin = useUserStore((state) => state.action.setIsLogin);
+  const setIsLogin = useUserStore((state) => state.actions.setIsLogin);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setIsLogin(true);
+      navigate('/', { replace: true });
+    }
+  }, [isSuccess, setIsLogin, navigate]);
 
   const handleValidation = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,6 +30,7 @@ export const Login = () => {
       setErrorMessege({ ...errorMessege, password: passwordValidator(value) });
     }
   };
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (emailValidator(loginValue.email) !== 'success' || passwordValidator(loginValue.password) !== 'success') {
@@ -36,10 +44,6 @@ export const Login = () => {
   }
   if (isError) return <NotFound messege={error.message} />;
 
-  if (isSuccess) {
-    setIsLogin(true);
-    navigate('/', { replace: true });
-  }
   return (
     <LoginContainer>
       <img src="/assets/logo.png" alt="logo" />
@@ -144,8 +148,8 @@ const ErrorMessege = styled.span`
   position: absolute;
   bottom: -20px;
   color: ${(props) => props.theme.colors.danger.normal};
-  font-size: var(--font-size-body-small);
-  line-height: var(--line-height-body-small);
-  font-weight: var(--font-weight-body-small);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-weight: var(--font-weight-caption);
   margin-bottom: 10px;
 `;

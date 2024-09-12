@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useState, useRef, useEffect } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useDeleteTrackQuery } from '@services/reactQuery/useDeleteQuery';
 import DeleteButton from '@pages/PlaylistDetail/components/DeleteButton';
 import LoadingCircular from '@components/LoadingCircular';
+
 const Tracks = ({
   playlistId,
   trackId,
@@ -17,44 +17,21 @@ const Tracks = ({
   playlistId: string;
   index: number;
 }) => {
-  const [more, setMore] = useState(false);
-  const titleRef = useRef(null);
-  const [moreButton, setMoreButton] = useState(false);
   const { mutate: trackDeleteMutate, isPending } = useDeleteTrackQuery();
   const deleteTrack = () => {
     trackDeleteMutate({ playlistId, trackId });
   };
-
-  const checkOverflow = () => {
-    if (titleRef.current) {
-      const { scrollWidth, clientWidth } = titleRef.current;
-      setMoreButton(scrollWidth > clientWidth);
-    }
-  };
-
-  useEffect(() => {
-    checkOverflow();
-    const handleResize = () => {
-      checkOverflow();
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
     <TracksContainer>
       {isPending && <LoadingCircular />}
+      <input type="checkbox" id={trackId} className="track__checkbox" />
       <h4>Tracks: {index + 1}</h4>
-      <a target="_blank" ref={titleRef} href={url} className={`track__title ${more ? 'more' : ''}`}>
+      <a target="_blank" href={url} className="track__title">
         {title}
       </a>
-      {moreButton && (
-        <span className="track__more" onClick={() => setMore((prev) => !prev)}>
-          <ExpandMoreIcon />
-        </span>
-      )}
+      <label htmlFor={trackId} className="track__more-button">
+        <ExpandMoreIcon />
+      </label>
 
       <DeleteButton onClick={deleteTrack} />
     </TracksContainer>
@@ -76,28 +53,37 @@ const TracksContainer = styled.li`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.background[3]};
   transition: all 0.3s;
+
   & h4 {
     white-space: nowrap;
   }
-  & a {
-    display: inline-block;
-    max-width: 70%;
-    color: ${(props) => props.theme.colors.text.title};
-    font-size: 20px;
-    text-decoration: none;
-    transition: all 0.35s;
-    text-overflow: ellipsis;
+  & .track__title {
+    flex: 1;
+    max-width: 300px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    white-space: nowrap;
-    &.more {
-      white-space: normal;
-      overflow-wrap: break-word;
-    }
+    text-decoration: none;
+    color: ${(props) => props.theme.colors.text.title};
+    transition: all 0.35s;
+
     &:hover {
       color: ${(props) => props.theme.colors.primary.normal};
     }
   }
-  & .track__more {
+
+  & .track__checkbox {
+    display: none;
+    &:checked ~ .track__more-button {
+      transform: rotate(180deg);
+    }
+    &:checked ~ .track__title {
+      -webkit-line-clamp: unset;
+    }
+  }
+
+  & .track__more-button {
     cursor: pointer;
     color: ${(props) => props.theme.colors.text.caption};
     transition: all 0.3s;

@@ -37,14 +37,19 @@ const Category = () => {
 export default Category;
 
 const CategoryContainer = styled.nav`
-  width: 100%;
-  min-height: 60px;
+  position: sticky;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  background-color: ${({ theme }) => theme.colors.background[1]};
   border-bottom: 1px solid ${({ theme }) => theme.colors.background[3]};
+  z-index: 2;
   & ul {
     display: flex;
-    justify-content: start;
     width: 100%;
     height: 100%;
+    min-height: 60px;
     padding: 0;
     & li {
       display: flex;

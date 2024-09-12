@@ -20,7 +20,7 @@ const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeD
 // 구독 상태 업데이트
 export const useSubscribedQuery = () => {
   const queryClient = useQueryClient();
-  const setUser = useUserStore((state) => state.action.setUser);
+  const setUser = useUserStore((state) => state.actions.setUser);
   return useMutation({
     mutationFn: updateSubscription,
     onSuccess: (user, { userId }) => {

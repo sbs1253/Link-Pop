@@ -44,7 +44,6 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.colors.background[2]};
     color: ${(props) => props.theme.colors.text.body};
     font-family: 'Pretendard-Regular', sans-serif;
-    overflow: hidden;
   }
 
   #root {

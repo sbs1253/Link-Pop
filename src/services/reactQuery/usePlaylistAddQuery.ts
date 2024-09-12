@@ -22,7 +22,7 @@ const addPlaylist = async (newPlaylist: DefaultPlaylistType, userId: string) => 
 export const usePlaylistAddQuery = () => {
   const queryClient = useQueryClient();
   const userId = useUserStore((state) => state.user.id);
-  const setUser = useUserStore((state) => state.action.setUser);
+  const setUser = useUserStore((state) => state.actions.setUser);
   return useMutation({
     mutationFn: (newPlaylist: DefaultPlaylistType) => addPlaylist(newPlaylist, userId),
     onSuccess: ({ playlistId, updatedUserData }) => {
