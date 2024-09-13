@@ -11,7 +11,7 @@ export const useCommentAddQuery = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: AddCommentParams) => addComment(params),
+    mutationFn: addComment,
     onSuccess: (playlistId) => {
       queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
     },

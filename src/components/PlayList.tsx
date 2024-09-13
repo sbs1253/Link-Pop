@@ -7,10 +7,10 @@ import {
   ThumbDownOutlined,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
-import { useDeletePlaylistQuery } from '@hooks/query/useDeleteQuery';
 import { useUserStore } from '@store/useUserStore';
 import { useToggle } from '@hooks/useToggle';
+import { usePlaylistDetailsQuery } from '@hooks/query/usePlaylistsQuery';
+import { useDeletePlaylistQuery } from '@hooks/query/useDeletePlaylistQuery';
 import LoadingCircular from '@components/LoadingCircular';
 import PlaylistForm from '@components/PlaylistForm';
 import { useSubscriptionAction } from '@hooks/useSubscriptionAction';

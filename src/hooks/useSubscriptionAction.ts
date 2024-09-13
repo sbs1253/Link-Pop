@@ -12,7 +12,6 @@ export const useSubscriptionAction = (playlistId: string, user: UserType) => {
   const subscribePlaylist = (e: React.MouseEvent) => {
     e.stopPropagation();
     subscribeMutate({
-      userId: user.id,
       playlistId: playlistId,
       subscribed: user.subscribedPlaylists?.[playlistId] || false,
     });

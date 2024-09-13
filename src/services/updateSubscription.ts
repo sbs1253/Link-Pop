@@ -1,14 +1,9 @@
 import { fetchUserDataFirebase } from '@services/userService';
 import { ref, update } from 'firebase/database';
 import { db } from '@src/firebase';
+import { SubscribeDataParams } from '@hooks/query/useSubscribedQuery';
 
-interface SubscribeDataParams {
-  userId: string;
-  playlistId: string;
-  subscribed: boolean;
-}
-
-export const updateSubscription = async ({ userId, playlistId, subscribed }: SubscribeDataParams) => {
+export const updateSubscription = async ({ playlistId, subscribed }: SubscribeDataParams, userId: string) => {
   const userRef = ref(db, `users/${userId}/subscribedPlaylists`);
   await update(userRef, { [playlistId]: !subscribed });
   const updatedUserData = await fetchUserDataFirebase(userId);

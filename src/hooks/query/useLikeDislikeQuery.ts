@@ -12,19 +12,13 @@ interface LikeDislikeDataParams {
 
 const updateLikeDislike = async ({ userId, playlistId, action, currentState }: LikeDislikeDataParams) => {
   const userRef = ref(db, `users/${userId}`);
-  const playlistAction = `${action}s`;
-  const userAction = action === 'like' ? 'likedPlaylists' : 'dislikedPlaylists';
-  const updates: { [key: string]: unknown } = {
-    [`users/${userId}/${userAction}/${playlistId}`]: !currentState,
-    [`playlists/${playlistId}/${playlistAction}`]: increment(currentState ? -1 : 1),
+  const playlistActionKey = `${action}s`;
+  const userActionKey = action === 'like' ? 'likedPlaylists' : 'dislikedPlaylists';
+  const updates = {
+    [`users/${userId}/${userActionKey}/${playlistId}`]: !currentState,
+    [`playlists/${playlistId}/${playlistActionKey}`]: increment(currentState ? -1 : 1),
   };
-  if (action === 'like') {
-    updates[`users/${userId}/likedPlaylists/${playlistId}`] = !currentState;
-    updates[`playlists/${playlistId}/${action}s`] = increment(currentState ? -1 : 1);
-  } else {
-    updates[`users/${userId}/dislikedPlaylists/${playlistId}`] = !currentState;
-    updates[`playlists/${playlistId}/${action}s`] = increment(currentState ? -1 : 1);
-  }
+
   await update(ref(db), updates);
   const userSnapshot = await get(userRef);
   return {
@@ -36,6 +30,7 @@ const updateLikeDislike = async ({ userId, playlistId, action, currentState }: L
 export const useLikeDislikeQuery = () => {
   const queryClient = useQueryClient();
   const setUser = useUserStore((state) => state.actions.setUser);
+
   return useMutation({
     mutationFn: updateLikeDislike,
     onSuccess: ({ user }, { userId, playlistId }) => {
