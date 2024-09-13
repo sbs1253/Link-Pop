@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import SendIcon from '@mui/icons-material/Send';
 import { useUserStore } from '@store/useUserStore';
-import { useCommentAddQuery } from '@services/reactQuery/useCommentAddQuery';
+import { useCommentAddQuery } from '@hooks/query/useCommentAddQuery';
 
 const CommentComponent = ({ playlistId }: { playlistId: string }) => {
   const [comment, setComment] = useState('');

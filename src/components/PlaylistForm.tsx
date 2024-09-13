@@ -1,8 +1,8 @@
-import { usePlaylistAddQuery } from '@services/reactQuery/usePlaylistAddQuery';
+import { usePlaylistAddQuery } from '@hooks/query/usePlaylistAddQuery';
 import styled from 'styled-components';
 import { DEFAULT_PLAYLIST } from '../constants/playlist';
 import { useUserStore } from '@store/useUserStore';
-import { usePlaylistUpdateQuery } from '@services/reactQuery/usePlaylistUpdateQuery';
+import { usePlaylistUpdateQuery } from '@hooks/query/usePlaylistUpdateQuery';
 import { PlaylistType } from '@store/types';
 interface PlaylistFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useTrackAddQuery } from '@services/reactQuery/useTrackAddQuery';
+import { useTrackAddQuery } from '@hooks/query/useTrackAddQuery';
 
 const PlaylistTrackForm = ({
   playlistId,

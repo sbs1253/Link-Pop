@@ -3,7 +3,7 @@ import PlayList from '@components/PlayList';
 import styled from 'styled-components';
 import LoadingCircular from '@components/LoadingCircular';
 import NotFound from '@pages/NotFound';
-import { useAllPlaylistsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import { useAllPlaylistsQuery } from '@hooks/query/usePlaylistsQuery';
 import { useSearchParams } from 'react-router-dom';
 const Home = () => {
   const [query] = useSearchParams();

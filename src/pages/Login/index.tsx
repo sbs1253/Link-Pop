@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useLoginQuery } from '@services/reactQuery/useLoginQuery';
+import { useLoginQuery } from '@hooks/query/useLoginQuery';
 import { useNavigate } from 'react-router-dom';
 import LoadingCircular from '@components/LoadingCircular';
 import NotFound from '@pages/NotFound';

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchUserDataFirebase } from './../api/userService';
+import { fetchUserDataFirebase } from '../../services/userService';
 
 // 유저 정보 가져오기
 export const useUserQuery = (userId: string) => {

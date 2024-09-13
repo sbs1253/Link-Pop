@@ -1,5 +1,5 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { fetchUserDataFirebase } from '@services/api/userService';
+import { fetchUserDataFirebase } from '@services/userService';
 import { UserType } from '@store/types';
 
 // 파이어베이스 로그인 서비스

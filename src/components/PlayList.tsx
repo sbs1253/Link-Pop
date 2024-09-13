@@ -8,7 +8,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
-import { useDeletePlaylistQuery } from '@services/reactQuery/useDeleteQuery';
+import { useDeletePlaylistQuery } from '@hooks/query/useDeleteQuery';
 import { useUserStore } from '@store/useUserStore';
 import { useToggle } from '@hooks/useToggle';
 import LoadingCircular from '@components/LoadingCircular';

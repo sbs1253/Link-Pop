@@ -1,12 +1,5 @@
-import { ref, update } from 'firebase/database';
-import { db } from '@src/firebase';
+import { updatePlaylist } from '@services/updatePlaylist';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { PlaylistType } from '@store/types';
-
-const updatePlaylist = async (updatedPlaylist: PlaylistType) => {
-  const playlistRef = ref(db, `playlists/${updatedPlaylist.id}`);
-  await update(playlistRef, updatedPlaylist);
-};
 
 // 플레이리스트 업데이트 쿼리
 export const usePlaylistUpdateQuery = () => {

@@ -1,4 +1,4 @@
-import { useLikeDislikeQuery } from '@services/reactQuery/useLikeDislikeQuery';
+import { useLikeDislikeQuery } from '@hooks/query/useLikeDislikeQuery';
 import { PlaylistsType, UserType } from '@store/types';
 
 export const useLikeDislikeActions = (playlistId: string, user: UserType) => {

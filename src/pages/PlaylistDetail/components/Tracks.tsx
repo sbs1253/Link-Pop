@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useDeleteTrackQuery } from '@services/reactQuery/useDeleteQuery';
+import { useDeleteTrackQuery } from '@hooks/query/useDeleteTrackQuery';
 import DeleteButton from '@pages/PlaylistDetail/components/DeleteButton';
 import LoadingCircular from '@components/LoadingCircular';
 

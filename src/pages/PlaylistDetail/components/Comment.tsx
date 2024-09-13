@@ -1,12 +1,12 @@
-import { useUserQuery } from '@services/reactQuery/useUserQuery';
+import { useUserQuery } from '@hooks/query/useUserQuery';
 import { CommentType } from 'src/store/types';
 import { MoreVertOutlined } from '@mui/icons-material';
 import styled from 'styled-components';
 import { useToggle } from '@hooks/useToggle';
 import { useUserStore } from '@store/useUserStore';
 import { useState } from 'react';
-import { useCommentUpdateQuery } from '@services/reactQuery/useCommentUpdateQuery';
-import { useCommentDeleteQuery } from '@services/reactQuery/useCommentDeleteQuery';
+import { useCommentUpdateQuery } from '@hooks/query/useCommentUpdateQuery';
+import { useCommentDeleteQuery } from '@hooks/query/useCommentDeleteQuery';
 import { formatTimestamp } from '@utils/formatTimestamp';
 
 const Comment = ({

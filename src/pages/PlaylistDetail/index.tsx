@@ -7,7 +7,7 @@ import Comment from '@pages/PlaylistDetail/components/Comment';
 import PlaylistTrackForm from '@pages/PlaylistDetail/components/TrackAddForm';
 import { ControlPoint } from '@mui/icons-material';
 import { useToggle } from '@hooks/useToggle';
-import { usePlaylistDetailsQuery } from '@services/reactQuery/usePlaylistsQuery';
+import { usePlaylistDetailsQuery } from '@hooks/query/usePlaylistsQuery';
 import LoadingCircular from '@components/LoadingCircular';
 import CommentForm from '@pages/PlaylistDetail/components/CommentForm';
 import { CommentType } from '@store/types';

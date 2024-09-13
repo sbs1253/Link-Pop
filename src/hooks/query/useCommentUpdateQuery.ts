@@ -1,24 +1,19 @@
-import { ref, push } from 'firebase/database';
-import { db } from '@src/firebase';
+import { updateComment } from '@services/updateComment';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CommentType } from 'src/store/types';
 
-interface AddCommentParams {
+export interface UpdateCommentParams {
   playlistId: string;
+  commentId: string;
   comment: CommentType;
 }
-const addComment = async ({ playlistId, comment }: AddCommentParams) => {
-  const playlistRef = ref(db, `playlists/${playlistId}/comments`);
-  await push(playlistRef, comment);
-  return playlistId;
-};
 
-// 댓글 추가 쿼리
-export const useCommentAddQuery = () => {
+// 댓글 업데이트 쿼리
+export const useCommentUpdateQuery = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: AddCommentParams) => addComment(params),
+    mutationFn: updateComment,
     onSuccess: (playlistId) => {
       queryClient.invalidateQueries({ queryKey: ['playlists', playlistId] });
     },
