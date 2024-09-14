@@ -7,8 +7,8 @@ import { useAllPlaylistsQuery } from '@hooks/query/usePlaylistsQuery';
 import { useSearchParams } from 'react-router-dom';
 const Home = () => {
   const [query] = useSearchParams();
-  const category = query.get('category');
-  const { data, isLoading, isError, error } = useAllPlaylistsQuery(category || 'all');
+  const category = query.get('category') ?? 'all';
+  const { data, isLoading, isError, error } = useAllPlaylistsQuery(category);
 
   if (isLoading) return <LoadingCircular />;
   if (isError) return <NotFound messege={error?.message || 'Not Found'} />;

@@ -29,7 +29,6 @@ const PlayList = ({ playlistId }: { playlistId: string }) => {
 
   if (playlistIsLoding || isPending) return <LoadingCircular />;
   if (playlistError || subscribeError) return <div>Error loading playlist</div>;
-
   if (!playlist) return null;
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();

@@ -29,13 +29,13 @@ export interface PlaylistType {
   creatorId: string;
   creator: PlaylistCreator;
   tracks: TrackType;
-  comments: CommentType;
+  comments: { [key: string]: CommentType };
   likes: number;
   dislikes: number;
   createdAt: number;
 }
 export interface DefaultPlaylistType {
-  comments: CommentType[];
+  comments: { [key: string]: CommentType };
   createdAt: number;
   creatorId: string;
   description: string;

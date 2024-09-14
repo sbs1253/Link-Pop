@@ -22,7 +22,6 @@ export const useAllPlaylistsQuery = (category: string) => {
     },
   });
 };
-
 // 개별 플레이리스트 상세 정보를 가져오는 쿼리
 export const usePlaylistDetailsQuery = (playlistId: string) => {
   return useQuery({

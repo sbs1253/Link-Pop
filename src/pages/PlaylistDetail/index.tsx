@@ -20,7 +20,7 @@ const PlaylistDetail = () => {
   if (isError) return <NotFound messege={error.message} />;
   if (!playlist) return <NotFound messege="Playlist not found" />;
 
-  const sortCommentsDate = (comments: CommentType) => {
+  const sortCommentsDate = (comments: { [key: string]: CommentType }) => {
     return Object.entries(comments).sort(([, a], [, b]) => b.createdAt - a.createdAt);
   };
   return (
@@ -114,5 +114,4 @@ const PlaylistDetailComment = styled.div`
   flex-direction: column;
   gap: 10px;
   padding: 0 10px;
-  /* overflow-y: auto; */
 `;

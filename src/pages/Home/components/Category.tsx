@@ -3,20 +3,21 @@ import styled from 'styled-components';
 const Category = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const handleClick = (category: string) => setSearchParams({ category });
+  const catagoryParams = searchParams.get('category') ?? 'all';
   const category = [
     {
       onclick: () => handleClick('all'),
-      className: searchParams.get('category') === 'all' ? 'active' : '',
+      className: catagoryParams === 'all' ? 'active' : '',
       text: 'All',
     },
     {
       onclick: () => handleClick('subscribe'),
-      className: searchParams.get('category') === 'subscribe' ? 'active' : '',
+      className: catagoryParams === 'subscribe' ? 'active' : '',
       text: 'Subscribe',
     },
     {
       onclick: () => handleClick('myPlaylist'),
-      className: searchParams.get('category') === 'myPlaylist' ? 'active' : '',
+      className: catagoryParams === 'myPlaylist' ? 'active' : '',
       text: 'MyPlaylist',
     },
   ];
